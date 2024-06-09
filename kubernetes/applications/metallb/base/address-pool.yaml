@@ -1,0 +1,9 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: svc
+spec:
+  addresses:
+    - 10.248.3.2-10.248.3.254
+  autoAssign: false
+  avoidBuggyIPs: true
