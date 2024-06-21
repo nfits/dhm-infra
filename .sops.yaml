@@ -3,6 +3,8 @@ creation_rules:
     pgp: >-
       CE12ED73C6D5DE0516516DCC397761D5D102CB9D,
       3C2F2605E078A1E18F4793909C4DBE6CF438F333
+    age: >-
+      age1jgqz87qgxh8qg8urrccz3tlr3htugwpk4sucmfys2k3c9srwv9aquzlguj
   - path_regex: cluster\.sops\.yaml$
     pgp: >-
       CE12ED73C6D5DE0516516DCC397761D5D102CB9D,

@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn
+spec:
+  project: default
+  destination:
+    namespace: longhorn-system
+    name: in-cluster
+  sources:
+    - repoURL: "https://charts.longhorn.io"
+      chart: longhorn
+      targetRevision: 1.6.2
+      helm:
+        valueFiles:
+          - $values/kubernetes/applications/longhorn/values.yaml
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      targetRevision: main
+      ref: values
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
