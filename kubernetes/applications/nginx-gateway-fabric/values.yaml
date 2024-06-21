@@ -1,0 +1,7 @@
+nginxGateway:
+  # FIXME: Increase
+  replicaCount: 1
+
+service:
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 10.248.3.2
