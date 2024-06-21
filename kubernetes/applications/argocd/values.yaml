@@ -1,5 +1,6 @@
 redis-ha:
-  enabled: true
+  # FIXME: Enable
+  enabled: false
 
 controller:
   replicas: 3
