@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metallb
+spec:
+  project: default
+  destination:
+    namespace: metallb-system
+    name: in-cluster
+  source:
+    repoURL: https://github.com/nfits/dhm-infra.git
+    targetRevision: main
+    path: kubernetes/applications/metallb
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
