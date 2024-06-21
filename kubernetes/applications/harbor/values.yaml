@@ -1,0 +1,12 @@
+expose:
+  type: clusterIP
+  tls:
+    enabled: false
+
+externalURL: https://harbor.dhm-ctf.de
+
+persistence:
+  enabled: true
+  persistentVolumeClaim:
+    registry:
+      size: 50Gi
