@@ -1,0 +1,25 @@
+redis-ha:
+  enabled: true
+
+controller:
+  replicas: 3
+
+server:
+  replicas: 3
+
+repoServer:
+  replicas: 3
+
+applicationSet:
+  replicas: 3
+
+configs:
+  secret:
+    # FIXME: Change
+    argocdServerAdminPassword: "$2b$14$thNCIvoVrECe8Ch9buVve.m6M53hLXlugkbIwN8yrVPp2m2Cobkey"
+
+global:
+  domain: argocd.dhm-ctf.de
+
+  affinity:
+    podAntiAffinity: hard
