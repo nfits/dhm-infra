@@ -15,11 +15,11 @@ defaultSettings:
   storageReservedPercentageForDefaultDisk: 10
   concurrentAutomaticEngineUpgradePerNodeLimit: 1
 
-# Override the images with ones built using the Dockerfile in misc/longhorn
+# Override the images with ones built with nixos
 # This fixes path issues on NixOS
 image:
   longhorn:
     manager:
-      repository: patricknfits/longhorn-manager
+      repository: dhm-ctf.de/nixos-built/longhorn-manager
     instanceManager:
-      repositoty: patricknfits/longhorn-instance-manager
+      repository: dhm-ctf.de/nixos-built/longhorn-instance-manager
