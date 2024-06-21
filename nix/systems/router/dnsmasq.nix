@@ -1,39 +1,15 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
-  tld = "dhm-ctf.de";
+  cfg = config.dhm.networking;
 
-  zones = {
-    cluster = {
-      dns = "cluster.${tld}";
-      listenAddress = "10.248.2.1";
-
-      dhcpRange = {
-        start = "10.248.2.150";
-        end = "10.248.2.254";
-        ttl = "24h";
-      };
-
-      staticLeases = {
-        # TODO: Set to actual MACs
-        node1 = { mac = "52:54:00:ef:ae:15"; ip = "10.248.2.10"; };
-        node2 = { mac = "52:54:00:61:b1:49"; ip = "10.248.2.11"; };
-        node3 = { mac = "52:54:00:8d:a3:2f"; ip = "10.248.2.12"; };
-      };
-    };
-
-    services = {
-      dns = "svc.${tld}";
-      listenAddress = "10.248.3.1";
-
-      dhcpRange = {
-        start = "10.248.2.150";
-        end = "10.248.2.254";
-        ttl = "24h";
-      };
-    };
-  };
+  hostsFile = pkgs.writeText "dnsmasq-hosts" (concatStringsSep "\n"
+    (flatten (mapAttrsToList
+      (_: cfg: mapAttrsToList
+        (name: entry: "${entry.ip} ${name}.${cfg.dns.subdomain}.${config.dhm.networking.tld}")
+        (cfg.dhcp.staticLeases // (mapAttrs (_: ip: { inherit ip; }) cfg.dns.extraHosts)))
+      config.dhm.networking.vlans)));
 in
 {
   services = {
@@ -41,35 +17,38 @@ in
       enable = true;
 
       settings = {
+        no-resolv = true;
+        no-hosts = true;
+        addn-hosts = "${hostsFile}";
+
         server = [ "1.1.1.1" "1.0.0.1" ];
 
-        auth-server = concatStringsSep "," (flatten [
-          "${config.networking.fqdn}"
-          (mapAttrsToList (_: v: v.listenAddress) zones)
-        ]);
-        auth-zone = tld;
-
-        interface = attrNames zones;
-        listen-address = concatStringsSep "," ((mapAttrsToList (_: v: v.listenAddress) zones) ++ [ "127.0.0.1" "::1" ]);
+        interface = attrNames cfg.vlans;
+        listen-address = concatStringsSep ","
+          ((mapAttrsToList (_: v: v.ipv4.routerAddress) cfg.vlans) ++ [ "127.0.0.1" "::1" ]);
 
         dhcp-range = mapAttrsToList
-          (zone: cfg: "set:${zone},${cfg.dhcpRange.start},${cfg.dhcpRange.end},${cfg.dhcpRange.ttl}")
-          (filterAttrs (_: v: v.dhcpRange or null != null) zones);
+          (zone: cfg: "set:${zone},${cfg.dhcp.firstIP},${cfg.dhcp.lastIP},${cfg.dhcp.ttl}")
+          (filterAttrs (_: v: v.dhcp.enable) cfg.vlans);
+
+        local = mapAttrsToList
+          (_: cfg: "/${cfg.dns.subdomain}.${config.dhm.networking.tld}/")
+          (filterAttrs (_: e: !e.dns.honorUpstream) cfg.vlans);
 
         dhcp-option = flatten (mapAttrsToList
           (zone: cfg: [
-            "tag:${zone},option:router,${cfg.listenAddress}"
-            "tag:${zone},option:dns-server,${cfg.listenAddress}"
-            "tag:${zone},option:domain-name,${cfg.dns}"
-            "tag:${zone},option:domain-search,${cfg.dns}"
+            "tag:${zone},option:router,${cfg.ipv4.routerAddress}"
+            "tag:${zone},option:dns-server,${cfg.ipv4.routerAddress}"
+            "tag:${zone},option:domain-name,${cfg.dns.subdomain}.${config.dhm.networking.tld}"
+            "tag:${zone},option:domain-search,${cfg.dns.subdomain}.${config.dhm.networking.tld}"
           ])
-          (filterAttrs (_: v: v.dhcpRange or null != null) zones));
+          (filterAttrs (_: v: v.dhcp.enable) cfg.vlans));
 
         dhcp-host = flatten (mapAttrsToList
           (zone: cfg: mapAttrsToList
             (hostname: hostCfg: "${hostCfg.mac},tag:${zone},${hostCfg.ip},${hostname},infinite")
-            (cfg.staticLeases or { }))
-          zones);
+            cfg.dhcp.staticLeases)
+          cfg.vlans);
       };
     };
 
@@ -77,7 +56,13 @@ in
   };
 
   networking.firewall = {
-    allowedTCPPorts = [ 53 ];
-    allowedUDPPorts = [ 53 67 ];
+    allowedTCPPorts = [
+      53 # DNS
+    ];
+
+    allowedUDPPorts = [
+      53 # DNS
+      67 # DHCP
+    ];
   };
 }

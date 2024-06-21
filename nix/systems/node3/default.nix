@@ -6,7 +6,10 @@ with lib;
   imports = mapAttrsToList
     (n: _: ./${n})
     (filterAttrs (n: _: n != "default.nix") (readDir ./.)) ++
-  [ (modulesPath + "/profiles/qemu-guest.nix") ];
+  [
+    ../node1/k3s-node-common
+    (modulesPath + "/profiles/qemu-guest.nix")
+  ];
 
   networking = {
     hostName = "node3";

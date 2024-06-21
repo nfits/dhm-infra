@@ -8,6 +8,7 @@ let
 
   clusterNodeCidr = "10.248.2.0/24";
 
+  lbSvcCIDR = "10.248.3.0/24";
   podCIDR = "10.250.0.0/16";
   svcCIDR = "10.251.0.0/16";
   dnsIP = "10.251.0.10";
@@ -16,11 +17,20 @@ in
   config = mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
-        nfs-utils # Required by longhorn
+        # Required by longhorn
+        nfs-utils
+        openiscsi
       ] ++ optionals (cfg.role == "server") [
         # Management
+        (wrapHelm kubernetes-helm {
+          plugins = with kubernetes-helmPlugins; [ helm-secrets ];
+        })
+
         k9s
         kubectl
+        kustomize
+        kustomize-sops
+        sops
       ];
 
       variables = mkIf (cfg.role == "server") {
@@ -33,6 +43,7 @@ in
 
       extraInputRules = ''
         ip saddr { ${clusterNodeCidr} } accept comment "Other cluster nodes"
+        ip daddr { ${lbSvcCIDR}, ${podCIDR}, ${svcCIDR} } accept comment "Kubernetes Load-Balancer Services"
         ip saddr { ${podCIDR}, ${svcCIDR} } accept comment "Kubernetes Pods / Services"
       '';
 
@@ -50,6 +61,7 @@ in
       k3s.extraFlags = concatStringsSep " " ([
         "--flannel-backend=host-gw"
         "--node-name=${config.networking.hostName}"
+        "--node-label=node.longhorn.io/create-default-disk=true"
 
         "--kubelet-arg=node-status-update-frequency=4s"
       ] ++ optionals (cfg.role == "server") [

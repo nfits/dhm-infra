@@ -23,6 +23,8 @@
         let
           pkgs = import nixpkgs {
             inherit system;
+
+            config = import ./nix/nixpkgs-config.nix inputs;
           };
 
           callDir = with builtins; with pkgs.lib; path: mapAttrs'
@@ -42,7 +44,11 @@
 
       nixosConfigurations = with builtins; with nixpkgs.lib; mapAttrs
         (n: _: nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+
+            config = import ./nix/nixpkgs-config.nix inputs;
+          };
 
           specialArgs = {
             inherit inputs self;

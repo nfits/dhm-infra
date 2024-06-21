@@ -15,9 +15,10 @@ in
 
   config = mkIf cfg.isProxmoxVM {
     boot = {
-      initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
-      kernelModules = [ "kvm-amd" ];
+      initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "sr_mod" "virtio_blk" ];
+      kernelModules = [ "kvm-intel" ];
 
+      # We are on UEFI
       loader = {
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
@@ -39,5 +40,8 @@ in
 
     networking.useDHCP = mkDefault true;
     nixpkgs.hostPlatform = mkDefault "x86_64-linux";
+
+    # All proxmox vms are qemu guests
+    services.qemuGuest.enable = mkDefault true;
   };
 }
