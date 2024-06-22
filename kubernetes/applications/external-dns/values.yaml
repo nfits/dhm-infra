@@ -1,0 +1,14 @@
+sources:
+  - gateway-httproute
+  - gateway-tlsroute
+  - gateway-grpcroute
+
+policy: sync
+
+registry: txt
+txtOwnerId: dhm-cluster
+txtPrefix: owner.
+
+provider: cloudflare
+cloudflare:
+  proxied: false
