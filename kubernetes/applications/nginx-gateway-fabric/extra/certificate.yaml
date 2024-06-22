@@ -12,5 +12,4 @@ spec:
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
-    # FIXME: Use non-staging letsencrypt
-    name: letsencrypt-staging
+    name: letsencrypt
