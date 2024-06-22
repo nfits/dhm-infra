@@ -6,9 +6,14 @@ let
 
   hostsFile = pkgs.writeText "dnsmasq-hosts" (concatStringsSep "\n"
     (flatten (mapAttrsToList
-      (_: cfg: mapAttrsToList
-        (name: entry: "${entry.ip} ${name}.${cfg.dns.subdomain}.${config.dhm.networking.tld}")
-        (cfg.dhcp.staticLeases // (mapAttrs (_: ip: { inherit ip; }) cfg.dns.extraHosts)))
+      (_: cfg: [
+        (mapAttrsToList
+          (name: entry: "${entry.ip} ${name}.${cfg.dns.subdomain}.${config.dhm.networking.tld}")
+          cfg.dhcp.staticLeases)
+        (mapAttrsToList
+          (slug: map (ip: "${ip} ${slug}.${cfg.dns.subdomain}.${config.dhm.networking.tld}"))
+          cfg.dns.extraHosts)
+      ])
       config.dhm.networking.vlans)));
 in
 {

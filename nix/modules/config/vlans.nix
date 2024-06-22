@@ -31,16 +31,22 @@ in
           };
         };
 
-        ipv4 = ipv4Default 2;
+        dns.extraHosts = {
+          api = [
+            (subnet24Ip 2 11) # Node 1
+          ];
+        };
+
+        ipv4 = ipv4Default 2 // { routedSubnets = [ "10.248.3.0/24" ]; };
         vlanId = vlanOffset + 2;
       };
 
-      services = {
-        dns.subdomain = "svc";
-
-        ipv4 = ipv4Default 3;
-        vlanId = vlanOffset + 3;
-      };
+      # services = {
+      #   dns.subdomain = "svc";
+      #
+      #   ipv4 = ipv4Default 3;
+      #   vlanId = vlanOffset + 3;
+      # };
 
       management = {
         dhcp = (dhcpDefault 4) // {

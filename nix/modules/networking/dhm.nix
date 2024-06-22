@@ -16,7 +16,7 @@ with lib;
             };
 
             extraHosts = mkOption {
-              type = attrsOf str;
+              type = attrsOf (listOf str);
               default = { };
               description = "Extra hosts.";
             };
@@ -62,6 +62,8 @@ with lib;
           ipv4 = {
             prefix = mkOption { type = str; };
             prefixLength = mkOption { type = int; };
+
+            routedSubnets = mkOption { type = listOf str; default = [ ]; };
 
             routerAddress = mkOption { type = str; };
             gateway = mkOption { type = nullOr str; default = null; };

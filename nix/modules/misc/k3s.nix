@@ -14,7 +14,7 @@ let
   dnsIP = "10.251.0.10";
 
   images = with pkgs.dockerTools; [
-    (buildImage rec {
+    (streamLayeredImage rec {
       name = "dhm-ctf.de/nixos-built/longhorn-manager";
       tag = "v1.6.2";
 
@@ -26,11 +26,14 @@ let
         finalImageTag = tag;
       };
 
-      config.Env = [
-        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/run/current-system/sw/bin"
-      ];
+      config = {
+        Env = [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+        ];
+        Cmd = [ "launch-manager" ];
+      };
     })
-    (buildImage rec {
+    (streamLayeredImage rec {
       name = "dhm-ctf.de/nixos-built/longhorn-instance-manager";
       tag = "v1.6.2";
 
@@ -42,14 +45,23 @@ let
         finalImageTag = tag;
       };
 
-      config.Env = [
-        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/run/current-system/sw/bin"
-      ];
+      config = {
+        Env = [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+        ];
+        Cmd = [ "longhorn" ];
+        Entrypoint = [ "/tini" "--" ];
+      };
     })
   ];
 in
 {
   config = mkIf cfg.enable {
+    boot.kernel.sysctl = {
+      "net.ipv4.conf.default.rp_filter" = 0;
+      "net.ipv4.conf.*.rp_filter" = 0;
+    };
+
     environment = {
       systemPackages = with pkgs; [
         # Required by longhorn
@@ -83,6 +95,9 @@ in
       '';
 
       allowedTCPPorts = [
+        4240 # healthchecks
+        4244 # hubble server
+        4245 # hubble relay
         10250 # kubelet
       ] ++ optionals (cfg.role == "server") [
         6443 # API
@@ -95,15 +110,18 @@ in
     services = {
       # NOTE: The update settings are quite extreme, but due to the nodes being in the same rack this is fine
       k3s.extraFlags = concatStringsSep " " ([
-        "--flannel-backend=host-gw"
+        "--flannel-backend=none"
         "--node-name=${config.networking.hostName}"
         "--node-label=node.longhorn.io/create-default-disk=true"
 
         "--kubelet-arg=node-status-update-frequency=4s"
       ] ++ optionals (cfg.role == "server") [
         "--disable-helm-controller"
+        "--disable-network-policy"
         "--disable local-storage"
         "--disable servicelb"
+        "--disable kube-proxy"
+        "--disable traefik"
 
         "--embedded-registry"
 
@@ -125,7 +143,7 @@ in
     };
 
     systemd.services.k3s-image-import = mkIf (cfg.role == "server" && cfg.clusterInit) {
-      path = with pkgs; [ gzip k3s ];
+      path = with pkgs; [ k3s ];
 
       script = ''
         echo "Waiting for k3s to become available..."
@@ -137,7 +155,7 @@ in
         echo "k3s available."
 
         ${concatStringsSep "\n" (map
-          (v: "zcat ${v} | ctr -n k8s.io image import -")
+          (v: "${v} | ctr -n k8s.io image import -")
           images)}
       '';
 

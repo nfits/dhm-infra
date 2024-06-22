@@ -16,5 +16,6 @@ pkgs.mkShell {
     nixpkgs-fmt
     sops
     sshuttle
+    vals
   ];
 }

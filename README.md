@@ -25,7 +25,7 @@ Due to constraints al VLANs are offset by +2000.
 | Zone          | VLAN                   | IP Ranges                        | DNS Zone     |
 |---------------|------------------------|----------------------------------|--------------|
 | Cluster Nodes | 2                      | 10.248.2.0/24                    | cluster.     |
-| Services      | 3                      | 10.248.3.0/24                    | svc.         |
+| Services      | - (Routed via Cluster) | 10.248.3.0/24                    | svc.         |
 | Management    | 4                      | 10.248.4.0/24                    | management.  |
 | Organisers    | 5                      | 10.248.5.0/24                    | orga.        |
 | Uplink        | 6                      | 10.248.6.0/24 (If needed at all) | uplink.      |

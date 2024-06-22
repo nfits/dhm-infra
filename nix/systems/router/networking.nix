@@ -24,6 +24,8 @@ let
       address = [ "${cfg.ipv4.routerAddress}/${toString cfg.ipv4.prefixLength}" ];
       gateway = optional (cfg.ipv4.gateway != null) "${cfg.ipv4.gateway}";
 
+      routes = map (subnet: { routeConfig = { Destination = subnet; }; }) cfg.ipv4.routedSubnets;
+
       linkConfig.RequiredForOnline = "routable";
     };
   };
