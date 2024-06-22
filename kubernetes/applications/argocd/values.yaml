@@ -104,6 +104,9 @@ configs:
       secrets, secrets+literal,
       https
 
+  params:
+    server.insecure: true
+
 global:
   domain: argocd.dhm-ctf.de
 
