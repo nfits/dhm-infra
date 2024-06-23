@@ -107,13 +107,14 @@ template:
         securityContext:
           runAsUser: 1000
           runAsGroup: 1000
-        image: moby/buildkit:v0.13.0-beta3-rootless
+        image: moby/buildkit:v0.14.1-rootless
         imagePullPolicy: IfNotPresent
         resources: { }
         volumeMounts:
           - mountPath: /mnt/buildkit
             name: buildkit
     imagePullSecrets:
+      # FIXME: Manually deployed. integrate into setup (at least deploy it using sops files)
       - name: regcred
     volumes:
       - name: buildkit
