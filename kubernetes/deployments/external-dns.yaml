@@ -1,19 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: longhorn
+  name: external-dns
 spec:
   project: default
   destination:
-    namespace: longhorn-system
+    namespace: external-dns
     name: in-cluster
   sources:
-    - repoURL: "https://charts.longhorn.io"
-      chart: longhorn
-      targetRevision: 1.6.2
+    - repoURL: "https://charts.bitnami.com/bitnami"
+      chart: external-dns
+      targetRevision: 8.0.0
       helm:
         valueFiles:
-          - $values/kubernetes/applications/longhorn/values.yaml
+          - $values/kubernetes/applications/external-dns/values.yaml
+          - secrets://https://raw.githubusercontent.com/nfits/dhm-infra/main/kubernetes/applications/external-dns/values.sops.yaml
     - repoURL: https://github.com/nfits/dhm-infra.git
       targetRevision: main
       ref: values

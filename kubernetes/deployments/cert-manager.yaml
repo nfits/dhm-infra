@@ -1,16 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: metallb
+  name: cert-manager
 spec:
   project: default
   destination:
-    namespace: metallb-system
+    namespace: cert-manager
     name: in-cluster
-  source:
-    repoURL: https://github.com/nfits/dhm-infra.git
-    targetRevision: main
-    path: kubernetes/applications/metallb
+  sources:
+    - repoURL: "https://charts.jetstack.io"
+      chart: cert-manager
+      targetRevision: 1.15.0
+      helm:
+        valueFiles:
+          - $values/kubernetes/applications/cert-manager/values.yaml
+          - secrets://https://raw.githubusercontent.com/nfits/dhm-infra/main/kubernetes/applications/cert-manager/values.sops.yaml
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      targetRevision: main
+      ref: values
   syncPolicy:
     automated:
       prune: true

@@ -1,24 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: harbor
 spec:
   project: default
   destination:
-    namespace: argocd
+    namespace: harbor
     name: in-cluster
   sources:
-    - repoURL: "https://argoproj.github.io/argo-helm"
-      chart: argo-cd
-      targetRevision: 7.2.0
+    - repoURL: "https://helm.goharbor.io"
+      chart: harbor
+      targetRevision: 1.15.0
       helm:
         valueFiles:
-          - $values/kubernetes/applications/argocd/values.yaml
-          - secrets://https://raw.githubusercontent.com/nfits/dhm-infra/main/kubernetes/applications/argocd/values.sops.yaml
+          - $values/kubernetes/applications/harbor/values.yaml
+          - secrets://https://raw.githubusercontent.com/nfits/dhm-infra/main/kubernetes/applications/harbor/values.sops.yaml
         ignoreMissingValueFiles: false
     - repoURL: https://github.com/nfits/dhm-infra.git
       targetRevision: main
       ref: values
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      targetRevision: main
+      path: kubernetes/applications/harbor/extra
   syncPolicy:
     automated:
       prune: true

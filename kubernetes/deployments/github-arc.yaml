@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: github-arc
+spec:
+  project: default
+  destination:
+    namespace: arc-system
+    name: in-cluster
+  sources:
+    - repoURL: 'ghcr.io'
+      chart: actions/actions-runner-controller-charts/gha-runner-scale-set-controller
+      targetRevision: 0.8.2
+      helm:
+        valueFiles:
+          - $values/kubernetes/applications/github-arc/controller.values.yaml
+        ignoreMissingValueFiles: false
+    - repoURL: 'ghcr.io'
+      chart: actions/actions-runner-controller-charts/gha-runner-scale-set
+      targetRevision: 0.8.2
+      helm:
+        valueFiles:
+          - $values/kubernetes/applications/github-arc/scale-set.values.yaml
+          - secrets://https://raw.githubusercontent.com/nfits/dhm-infra/main/kubernetes/applications/github-arc/scale-set.values.sops.yaml
+        ignoreMissingValueFiles: false
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      targetRevision: main
+      path: kubernetes/applications/github-arc/extra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # Required due to overly large CRDs
+      - Replace=true

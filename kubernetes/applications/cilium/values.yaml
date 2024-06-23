@@ -21,11 +21,6 @@ routingMode: "native"
 autoDirectNodeRoutes: true
 ipv4NativeRoutingCIDR: "10.250.0.0/16"
 
-gatewayAPI:
-  enabled: true
-  enableAlpn: true
-  enableAppProtocol: true
-
 loadBalancer:
   mode: dsr
   algorithm: maglev
@@ -50,8 +45,3 @@ hubble:
   ui:
     enabled: true
     rollOutPods: true
-
-# FIXME: Remove
-debug:
-  enabled: true
-  verbose: envoy
