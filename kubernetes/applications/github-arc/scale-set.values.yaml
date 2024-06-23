@@ -76,6 +76,8 @@ template:
           - name: ACTIONS_RUNNER_CONTAINER_HOOK_TEMPLATE
             value: /etc/hook-extension/template.yaml
         volumeMounts:
+          - mountPath: /static-files
+            name: static-files
           - name: work
             mountPath: /build/.github-runner/_work
           - name: hook-extension
@@ -117,6 +119,8 @@ template:
     volumes:
       - name: buildkit
         emptyDir: { }
+      - persistentVolumeClaim:
+          claimName: ctf-platform-static-files
       - name: hook-extension
         configMap:
           name: hook-extension
