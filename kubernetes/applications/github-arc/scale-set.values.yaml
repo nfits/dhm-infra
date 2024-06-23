@@ -64,6 +64,7 @@ template:
     containers:
       - name: runner
         image: dhm-ctf.de/nixos-built/github-actions-runner:latest
+        imagePullPolicy: IfNotPresent
         command: [ "run.sh" ]
         env:
           - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
