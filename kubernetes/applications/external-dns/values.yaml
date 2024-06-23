@@ -1,4 +1,5 @@
 sources:
+  - service
   - gateway-httproute
   - gateway-tlsroute
   - gateway-grpcroute
