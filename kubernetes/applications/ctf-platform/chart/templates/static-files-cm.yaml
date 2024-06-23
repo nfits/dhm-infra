@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-static-files
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+data:
+  "nginx.conf": |
+    user  nginx;
+    worker_processes  auto;
+
+    error_log  /dev/stdout notice;
+    pid        /var/run/nginx.pid;
+
+    events {
+      worker_connections  1024;
+    }
+
+    http {
+      server {
+        listen 8080;
+
+        location / {
+          root /static-files;
+          types { } default_type "application/octet-stream";
+
+          rewrite "^/([0-9a-f]{64})/.*$" /$1 break;
+          return 403;
+        }
+
+        location /readyz {
+          return 200 "ok";
+        }
+      }
+    }

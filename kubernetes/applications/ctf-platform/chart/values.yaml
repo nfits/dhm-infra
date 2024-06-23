@@ -1,0 +1,168 @@
+auth:
+  discord:
+    enabled: false
+    clientId: ""
+    clientSecret: ""
+
+    admins: [ ]
+
+api:
+  replicaCount: 1
+
+  config:
+    # url: ""
+    powDifficulty: 10
+
+  image:
+    # repository:
+    pullPolicy: Always
+    # tag: ""
+
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: grpc
+
+  grpcRoute:
+    enabled: false
+    hostnames: [ ]
+    parentRefs: [ ]
+
+  resources: { }
+
+  affinity: { }
+  podLabels: { }
+  tolerations: [ ]
+  nodeSelector: { }
+  podAnnotations: { }
+  securityContext: { }
+  podSecurityContext: { }
+
+broker:
+  replicaCount: 1
+
+  image:
+    # repository:
+    pullPolicy: Always
+    # tag: ""
+
+  config:
+    ssh:
+      enabled: true
+      port: 22
+    tls:
+      enabled: true
+      port: 443
+      # secretName:
+
+  service:
+    type: LoadBalancer
+    annotations: { }
+
+  resources: { }
+
+  affinity: { }
+  podLabels: { }
+  tolerations: [ ]
+  nodeSelector: { }
+  podAnnotations: { }
+  securityContext: { }
+  podSecurityContext: { }
+
+frontend:
+  replicaCount: 1
+
+  image:
+    # repository:
+    pullPolicy: Always
+    # tag: ""
+
+  config:
+    # url: ""
+
+  httpRoute:
+    enabled: false
+    hostnames: [ ]
+    parentRefs: [ ]
+
+  readinessProbe:
+    httpGet:
+      path: /config.json
+      port: http
+
+  resources: { }
+
+  affinity: { }
+  podLabels: { }
+  tolerations: [ ]
+  nodeSelector: { }
+  podAnnotations: { }
+  securityContext: { }
+  podSecurityContext: { }
+
+staticFiles:
+  replicaCount: 1
+
+  image:
+    repository: nginx
+    pullPolicy: IfNotPresent
+    # tag: ""
+
+  config:
+    # url: ""
+
+  httpRoute:
+    enabled: false
+    hostnames: [ ]
+    parentRefs: [ ]
+
+  livenessProbe:
+    httpGet:
+      path: /readyz
+      port: http
+
+  readinessProbe:
+    httpGet:
+      path: /readyz
+      port: http
+
+  affinity: { }
+  podLabels: { }
+  tolerations: [ ]
+  nodeSelector: { }
+  podAnnotations: { }
+  securityContext: { }
+  podSecurityContext: { }
+
+  resources: { }
+
+  storage:
+    size: 10Gi
+
+challenges:
+  # domain: ""
+  namespace: challenges
+  createNamespace: true
+  # registry: ""
+  # registryCredentialName: ""
+
+  networkPolicies:
+    required: [ ]
+    available: [ ]
+
+imagePullSecrets: [ ]
+nameOverride: ""
+fullnameOverride: ""
+
+extraDeploy: [ ]
+extraSecretsDeploy: [ ]
+
+etcd:
+  auth:
+    rbac:
+      create: false
+
+  # FIXME: This is bullshit as far as security goes, switch to actual authentication
+  networkPolicy:
+    enabled: true
+    allowExternal: false

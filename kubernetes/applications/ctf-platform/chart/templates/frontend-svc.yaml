@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-frontend
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  selector:
+    app.kubernetes.io/component: frontend
+    {{- include "chart.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: 80
+      targetPort: http

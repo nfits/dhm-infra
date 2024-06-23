@@ -1,0 +1,133 @@
+api:
+  image:
+    repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/platform
+
+  config:
+    url: "https://api.dhm-ctf.de"
+
+  grpcRoute:
+    enabled: true
+    hostnames:
+      - api.dhm-ctf.de
+
+    parentRefs:
+      - name: main
+        namespace: gateway-system
+        sectionName: https
+
+broker:
+  image:
+    repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/platform
+
+  service:
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: "*.challenges.dhm-ctf.de"
+
+  config:
+    tls:
+      secretName: broker-tls
+
+frontend:
+  image:
+    repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/web
+    tag: cscg
+
+  config:
+    url: "https://play.dhm-ctf.de"
+
+  httpRoute:
+    enabled: true
+    hostnames:
+      - play.dhm-ctf.de
+
+    parentRefs:
+      - name: main
+        namespace: gateway-system
+        sectionName: https
+
+staticFiles:
+  config:
+    url: "https://static.dhm-ctf.de"
+
+  httpRoute:
+    enabled: true
+    hostnames:
+      - static.dhm-ctf.de
+
+    parentRefs:
+      - name: main
+        namespace: gateway-system
+        sectionName: https
+
+  storage:
+    size: 10Gi
+
+etcd:
+  persistence:
+    enabled: true
+    size: 8Gi
+
+  networkPolicy:
+    ingressNSMatchLabels:
+      platform-etcd-access: "true"
+
+imagePullSecrets:
+  - name: registry-credentials
+
+challenges:
+  domain: challenge.dhm-ctf.de
+  namespace: challenges
+  registry: harbor.dhm-ctf.de/internal/challenges
+  registryCredentialName: registry-credentials
+
+  networkPolicies:
+    required:
+      - default
+    available:
+      - default
+      - allow-outgoing
+
+extraDeploy:
+  - apiVersion: cilium.io/v2
+    kind: CiliumClusterwideNetworkPolicy
+    metadata:
+      name: broker-policy-default
+    spec:
+      endpointSelector:
+        matchLabels:
+          broker-policy/default: "true"
+      egress:
+        - toPorts:
+            - ports:
+                - port: "53"
+                  protocol: ANY
+          toEndpoints:
+            - matchLabels:
+                k8s:io.kubernetes.pod.namespace: kube-system
+                k8s:k8s-app: kube-dns
+  - apiVersion: cilium.io/v2
+    kind: CiliumClusterwideNetworkPolicy
+    metadata:
+      name: broker-policy-allow-outgoing
+    spec:
+      endpointSelector:
+        matchLabels:
+          broker-policy/allow-outgoing: "true"
+      egress:
+        - toEntities:
+            - world
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: broker-tls
+    spec:
+      secretName: broker-tls
+      commonName: challenges.dhm-ctf.de
+      dnsNames:
+        - challenges.dhm-ctf.de
+        - "*.challenges.dhm-ctf.de"
+      issuerRef:
+        group: cert-manager.io
+        kind: ClusterIssuer
+        name: letsencrypt
+

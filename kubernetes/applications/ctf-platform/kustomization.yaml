@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+#  - base/api-deployment.yaml
+#  - base/api-grpcroute.yaml
+#  - base/api-proxy-config.yaml
+#  - base/api-proxy-deployment.yaml
+#  - base/api-proxy-service.yaml
+#  - base/api-service.yaml
+#  - base/broker-certificate.yaml
+#  - base/broker-deployment.yaml
+#  - base/broker-service.yaml
+#  - base/broker-tlsroute.yaml
+  - base/challenge-namespace.yaml
+#  - base/config.yaml
+  - base/etcd-deployment.yaml
+  - base/etcd-service.yaml
+  - base/networkpolicies.yaml
+#  - base/reaper-cronjob.yaml
+#  - base/serviceaccount.yaml
+#  - base/ssh-broker-deployment.yaml
+#  - base/ssh-broker-service.yaml
+  - base/static-files-config.yaml
+  - base/static-files-deployment.yaml
+  - base/static-files-httproute.yaml
+  - base/static-files-service.yaml
+#  - base/web-deployment.yaml
+#  - base/web-httproute.yaml
+#  - base/web-service.yaml

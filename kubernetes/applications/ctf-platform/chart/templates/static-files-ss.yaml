@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-static-files
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.staticFiles.replicaCount }}
+  serviceName: {{ .Release.Name }}-static-files
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: static-files
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        nfits.de/config-checksum: {{ include (print $.Template.BasePath "/static-files-cm.yaml" ) . | sha256sum | quote }}
+        {{- with .Values.staticFiles.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        app.kubernetes.io/component: static-files
+        {{- include "chart.labels" . | nindent 8 }}
+        {{- with .Values.staticFiles.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.staticFiles.podSecurityContext | nindent 8 }}
+      containers:
+        - name: nginx
+          securityContext:
+            {{- toYaml .Values.staticFiles.securityContext | nindent 12 }}
+          image: "{{ .Values.staticFiles.image.repository }}:{{ .Values.staticFiles.image.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.staticFiles.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.staticFiles.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.staticFiles.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.staticFiles.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /static-files
+              name: static-files
+              readOnly: true
+            - mountPath: /etc/nginx/nginx.conf
+              name: config
+              readOnly: true
+              subPath: "nginx.conf"
+      volumes:
+        - name: static-files
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-static-files
+        - name: config
+          configMap:
+            name: {{ .Release.Name }}-static-files
+      {{- with .Values.staticFiles.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.staticFiles.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.staticFiles.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

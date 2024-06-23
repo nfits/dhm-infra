@@ -1,0 +1,112 @@
+{{- if or .Values.broker.config.tls.enabled .Values.broker.config.ssh.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-broker
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.broker.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: broker
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        nfits.de/config-checksum: {{ include (print $.Template.BasePath "/config.yaml" ) . | sha256sum | quote }}
+        {{- with .Values.broker.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        app.kubernetes.io/component: broker
+        # FIXME: Remove
+        {{ .Release.Name }}-etcd-client: "true"
+        {{- include "chart.labels" . | nindent 8 }}
+        {{- with .Values.broker.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.broker.podSecurityContext | nindent 8 }}
+      containers:
+        {{- if .Values.broker.config.tls.enabled }}
+        - name: tls-broker
+          securityContext:
+            {{- toYaml .Values.broker.securityContext | nindent 12 }}
+          image: "{{ .Values.broker.image.repository }}:{{ .Values.broker.image.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.broker.image.pullPolicy }}
+          ports:
+            - name: tls
+              containerPort: 1337
+              protocol: TCP
+          command:
+            - platform
+            - tls-broker
+            - --config=/config/config.json
+            - --hello-timeout=10s
+          readinessProbe:
+            {{- toYaml .Values.broker.readinessProbe | nindent 12 }}
+          livenessProbe:
+            {{- toYaml .Values.broker.livenessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.broker.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /config/config.json
+              name: config
+              readOnly: true
+              subPath: "platform.json"
+            - mountPath: /cert
+              name: cert
+              readOnly: true
+        {{- end }}
+        {{- if .Values.broker.config.ssh.enabled }}
+        - name: ssh-broker
+          securityContext:
+            {{- toYaml .Values.broker.securityContext | nindent 12 }}
+          image: "{{ .Values.broker.image.repository }}:{{ .Values.broker.image.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.broker.image.pullPolicy }}
+          ports:
+            - name: ssh
+              containerPort: 2222
+              protocol: TCP
+          command:
+            - platform
+            - ssh-broker
+            - --config=/config/config.json
+            - --hello-timeout=10s
+          readinessProbe:
+            {{- toYaml .Values.broker.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.broker.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /config/config.json
+              name: config
+              readOnly: true
+              subPath: "platform.json"
+          {{- end }}
+      volumes:
+        - name: config
+          secret:
+            secretName: {{ .Release.Name }}-config
+        - name: cert
+          secret:
+            secretName: {{ .Values.broker.config.tls.secretName }}
+      {{- with .Values.broker.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.broker.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.broker.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

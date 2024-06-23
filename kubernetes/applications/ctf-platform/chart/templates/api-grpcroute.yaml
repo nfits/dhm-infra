@@ -1,0 +1,22 @@
+{{ if .Values.api.grpcRoute.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+# FIXME: This should be GRPCRoute, but for some reason our platform doesn't support it
+kind: HTTPRoute
+metadata:
+  name: {{ .Release.Name }}-api
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    {{- with .Values.api.grpcRoute.parentRefs }}
+    {{- toYaml . | trim | nindent 6 }}
+    {{- end }}
+  hostnames:
+    {{- with .Values.api.grpcRoute.hostnames }}
+    {{- toYaml . | trim | nindent 6 }}
+    {{- end }}
+  rules:
+    - backendRefs:
+        - name: {{ .Release.Name }}-api
+          port: 80
+{{ end }}

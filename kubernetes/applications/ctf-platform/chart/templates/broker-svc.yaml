@@ -1,0 +1,29 @@
+{{- if or .Values.broker.config.tls.enabled .Values.broker.config.ssh.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-broker
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+
+  {{- with .Values.broker.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.broker.service.type }}
+  selector:
+    app.kubernetes.io/component: broker
+    {{- include "chart.selectorLabels" . | nindent 4 }}
+  ports:
+    {{- if .Values.broker.config.tls.enabled }}
+    - port: {{ .Values.broker.config.tls.port }}
+      targetPort: tls
+      name: tls
+    {{- end }}
+    {{- if .Values.broker.config.ssh.enabled }}
+    - port: {{ .Values.broker.config.ssh.port }}
+      targetPort: ssh
+      name: ssh
+    {{- end }}
+{{- end }}
