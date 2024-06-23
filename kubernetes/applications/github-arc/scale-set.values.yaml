@@ -1,0 +1,136 @@
+## githubConfigUrl is the GitHub url for where you want to configure runners
+## ex: https://github.com/myorg/myrepo or https://github.com/myorg
+githubConfigUrl: "https://github.com/nfits"
+
+## maxRunners is the max number of runners the autoscaling runner set will scale up to.
+maxRunners: 5
+
+## minRunners is the min number of idle runners. The target number of runners created will be
+## calculated as a sum of minRunners and the number of jobs assigned to the scale set.
+minRunners: 1
+
+runnerGroup: "DHM Platform"
+
+## name of the runner scale set to create.  Defaults to the helm release name
+runnerScaleSetName: "dhm-platform"
+
+## Container mode is an object that provides out-of-box configuration
+## for dind and kubernetes mode. Template will be modified as documented under the
+## template object.
+##
+## If any customization is required for dind or kubernetes mode, containerMode should remain
+## empty, and configuration should be applied to the template.
+containerMode:
+  type: "kubernetes"  ## type can be set to dind or kubernetes
+  ## the following is required when containerMode.type=kubernetes
+  kubernetesModeWorkVolumeClaim:
+    accessModes: [ "ReadWriteOnce" ]
+    resources:
+      requests:
+        storage: 10Gi
+
+## template is the PodSpec for each listener Pod
+## For reference: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+# listenerTemplate:
+#   spec:
+#     containers:
+#     # Use this section to append additional configuration to the listener container.
+#     # If you change the name of the container, the configuration will not be applied to the listener,
+#     # and it will be treated as a side-car container.
+#     - name: listener
+#       securityContext:
+#         runAsUser: 1000
+#     # Use this section to add the configuration of a side-car container.
+#     # Comment it out or remove it if you don't need it.
+#     # Spec for this container will be applied as is without any modifications.
+#     - name: side-car
+#       image: example-sidecar
+
+## template is the PodSpec for each runner Pod
+## For reference: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+template:
+  metadata:
+    annotations:
+      container.apparmor.security.beta.kubernetes.io/buildkit: unconfined
+  spec:
+    serviceAccountName: platform-builder
+    initContainers:
+      - name: kube-init
+        image: harbor.dhm-ctf.de/ghcr/actions/actions-runner:latest
+        command: [ "sudo", "chown", "-R", "1000:1000", "/home/runner/_work" ]
+        volumeMounts:
+          - name: work
+            mountPath: /home/runner/_work
+    containers:
+      - name: runner
+        image: harbor.dhm-ctf.de/ghcr/nfits/github-actions-runner:latest
+        command: [ "run.sh" ]
+        env:
+          - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+            value: "false"
+          - name: ACTIONS_RUNNER_CONTAINER_HOOKS
+            value: /share/actions-runner-hooks-k8s/index.js
+          - name: RUNNER_ROOT
+            value: /build/.github-runner
+          - name: ACTIONS_RUNNER_CONTAINER_HOOK_TEMPLATE
+            value: /etc/hook-extension/template.yaml
+        volumeMounts:
+          - name: work
+            mountPath: /build/.github-runner/_work
+          - name: hook-extension
+            mountPath: /etc/hook-extension
+          - name: buildkit
+            mountPath: /mnt/buildkit
+      - name: buildkit
+        args:
+          - --addr
+          - unix:///run/user/1000/buildkit/buildkitd.sock
+          - --addr
+          - unix:///mnt/buildkit/buildkitd.sock
+          - --oci-worker-no-process-sandbox
+        readinessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        livenessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+        image: moby/buildkit:v0.13.0-beta3-rootless
+        imagePullPolicy: IfNotPresent
+        resources: { }
+        volumeMounts:
+          - mountPath: /mnt/buildkit
+            name: buildkit
+    imagePullSecrets:
+      - name: regcred
+    volumes:
+      - name: buildkit
+        emptyDir: { }
+      - name: hook-extension
+        configMap:
+          name: hook-extension
+          items:
+            - key: content
+              path: template.yaml
+
+## Optional controller service account that needs to have required Role and RoleBinding
+## to operate this gha-runner-scale-set installation.
+## The helm chart will try to find the controller deployment and its service account at installation time.
+## In case the helm chart can't find the right service account, you can explicitly pass in the following value
+## to help it finish RoleBinding with the right service account.
+## Note: if your controller is installed to only watch a single namespace, you have to pass these values explicitly.
+controllerServiceAccount:
+  namespace: arc-system
+  name: github-arc-gha-rs-controller
