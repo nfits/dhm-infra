@@ -5,7 +5,7 @@ metadata:
 spec:
   project: default
   destination:
-    namespace: arc-system
+    namespace: ctf-platform
     name: in-cluster
   sources:
     - repoURL: 'ghcr.io'
@@ -34,6 +34,5 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
       # Required due to overly large CRDs
       - Replace=true
