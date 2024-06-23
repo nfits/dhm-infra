@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hook-extension
+data:
+  content: |
+    spec:
+      containers:
+        - name: "$job"
+          volumeMounts:
+            - mountPath: /mnt/buildkit
+              name: buildkit
