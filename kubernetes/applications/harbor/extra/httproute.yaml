@@ -1,0 +1,33 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: harbor
+spec:
+  parentRefs:
+    - name: main
+      namespace: gateway-system
+      sectionName: https
+  hostnames:
+    - harbor.dhm-ctf.de
+  rules:
+    - backendRefs:
+        - name: harbor
+          port: 80
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            add:
+              - name: X-Forwarded-Proto
+                value: https
+---
+apiVersion: gateway.nginx.org/v1alpha1
+kind: ClientSettingsPolicy
+metadata:
+  name: harbor
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: harbor
+  body:
+    maxSize: "10g"
