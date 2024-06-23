@@ -4,6 +4,7 @@ sources:
   - gateway-tlsroute
   - gateway-grpcroute
 
+triggerLoopOnEvent: true
 policy: sync
 
 registry: txt
