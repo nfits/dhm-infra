@@ -3,11 +3,11 @@
 githubConfigUrl: "https://github.com/nfits"
 
 ## maxRunners is the max number of runners the autoscaling runner set will scale up to.
-maxRunners: 5
+maxRunners: 10
 
 ## minRunners is the min number of idle runners. The target number of runners created will be
 ## calculated as a sum of minRunners and the number of jobs assigned to the scale set.
-minRunners: 1
+minRunners: 5
 
 runnerGroup: "DHM Platform"
 
