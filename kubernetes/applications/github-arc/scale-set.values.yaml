@@ -56,14 +56,14 @@ template:
     serviceAccountName: platform-builder
     initContainers:
       - name: kube-init
-        image: harbor.dhm-ctf.de/ghcr/actions/actions-runner:latest
+        image: ghcr.io/actions/actions-runner:latest
         command: [ "sudo", "chown", "-R", "1000:1000", "/home/runner/_work" ]
         volumeMounts:
           - name: work
             mountPath: /home/runner/_work
     containers:
       - name: runner
-        image: harbor.dhm-ctf.de/ghcr/nfits/github-actions-runner:latest
+        image: dhm-ctf.de/nixos-built/github-actions-runner:latest
         command: [ "run.sh" ]
         env:
           - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
@@ -113,9 +113,6 @@ template:
         volumeMounts:
           - mountPath: /mnt/buildkit
             name: buildkit
-    imagePullSecrets:
-      # FIXME: Manually deployed. integrate into setup (at least deploy it using sops files)
-      - name: regcred
     volumes:
       - name: buildkit
         emptyDir: { }
