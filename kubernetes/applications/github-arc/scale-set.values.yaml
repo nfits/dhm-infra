@@ -119,7 +119,8 @@ template:
     volumes:
       - name: buildkit
         emptyDir: { }
-      - persistentVolumeClaim:
+      - name: static-files
+        persistentVolumeClaim:
           claimName: ctf-platform-static-files
       - name: hook-extension
         configMap:
