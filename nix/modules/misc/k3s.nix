@@ -53,6 +53,110 @@ let
         Entrypoint = [ "/tini" "--" ];
       };
     })
+    (streamLayeredImage rec {
+      name = "dhm-ctf.de/nixos-built/github-actions-runner";
+      tag = "latest";
+
+      contents = with pkgs; with dockerTools;
+        let
+          post-build-hook = writeShellScriptBin "post-build-hook" ''
+            if [ -d /mnt/ci-nix ]; then
+              echo "Saving paths" $OUT_PATHS
+              exec nix copy --to "file:///mnt/ci-nix/" $OUT_PATHS
+            fi
+          '';
+        in
+        [
+          bashInteractive
+          buildkit
+          caCertificates
+          coreutils
+          cue
+          git
+          github-runner
+          gnugrep
+          gnutar
+          gzip
+          jq
+          kubectl
+          nix
+          post-build-hook
+
+          (writeTextDir "/etc/nix/nix.conf" ''
+            experimental-features = nix-command flakes
+            post-build-hook = ${post-build-hook}/bin/post-build-hook
+            extra-substituters = file:///mnt/ci-nix/
+          '')
+
+          (fakeNss.override {
+            extraPasswdLines = [
+              "nixbld:x:1000:1000:Build user:/build:/noshell"
+            ];
+
+            extraGroupLines = [
+              "nixbld:!:1000:"
+            ];
+          })
+
+          (writeTextDir "/etc/containers/policy.json" (builtins.toJSON
+            {
+              "default" = [
+                {
+                  "type" = "insecureAcceptAnything";
+                }
+              ];
+              "transports" =
+                {
+                  "docker-daemon" =
+                    {
+                      "" = [{ "type" = "insecureAcceptAnything"; }];
+                    };
+                };
+            }))
+
+          (stdenvNoCC.mkDerivation rec {
+            version = "0.5.0";
+            name = "actions-runner-hooks-k8s";
+
+            src = pkgs.fetchzip {
+              url = "https://github.com/actions/runner-container-hooks/releases/download/v${version}/actions-runner-hooks-k8s-${version}.zip";
+              hash = "sha256-JNB13yyDS5uLYSjrZEVDIYDAvXVwXmuhmFwR/B+4roI=";
+            };
+
+            installPhase = ''
+              mkdir -p $out/share/actions-runner-hooks-k8s
+              cp index.js $out/share/actions-runner-hooks-k8s/
+            '';
+          })
+        ];
+
+
+      fakeRootCommands = ''
+        mkdir -p ./nix/{store,var/nix} ./etc/nix
+        chown -R 1000:1000 ./nix ./etc/nix
+
+        mkdir -p ./build/.github-runner
+        chown -R 1000:1000 ./build
+
+        mkdir ./tmp
+        mkdir -p ./var/tmp
+        chmod 1777 ./tmp ./var/tmp
+
+        ln -s /lib/externals/ ./build/.github-runner/externals
+
+        touch ./etc/os-release
+      '';
+
+      config = {
+        Env = [
+          "NIX_PAGER=cat"
+          "USER=nixbld"
+          "RUNNER_ROOT=/build/.github-runner"
+        ];
+        User = "nixbld";
+        WorkingDir = "/build/.github-runner";
+      };
+    })
   ];
 in
 {
@@ -60,6 +164,9 @@ in
     boot.kernel.sysctl = {
       "net.ipv4.conf.default.rp_filter" = 0;
       "net.ipv4.conf.*.rp_filter" = 0;
+
+      "fs.inotify.max_user_watches" = 1048576;
+      "fs.inotify.max_user_instances" = 512;
     };
 
     environment = {
