@@ -46,6 +46,16 @@
           publicKey = "sDka5SCnnxNxE95U/qMIqD2UZc0bqqRr8xL8o3tT4Gg=";
           allowedIPs = [ "10.247.0.7/32" ];
         }
+        # Tobias (FluxFingers, External Author)
+        {
+          publicKey = "Ui3RMybcJmUpEZajzWcBdNpENn8JQA++HyDmXozsO3g=";
+          allowedIPs = [ "10.247.0.8/32" ];
+        }
+        # Felix (FluxFingers, External Author)
+        {
+          publicKey = "uBV+CiQZuMLuIZFIAJOo5i3+4QD7IMvVR8k5AlOun10=";
+          allowedIPs = [ "10.247.0.9/32" ];
+        }
       ];
     };
 

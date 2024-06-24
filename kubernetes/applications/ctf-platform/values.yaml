@@ -9,6 +9,8 @@ auth:
       - "534109324193300503" # Felipe (NFITS)
       - "469574966279667712" # Thomas (NFITS)
       - "731828453367742506" # Kolja (NFITS)
+      - "166211731503316993" # Tobias (FluxFingers, External Authors)
+      - "488765441032847394" # Felix (FluxFingers, External Authors)
 
 api:
   image:
