@@ -75,7 +75,7 @@ imagePullSecrets:
   - name: registry-credentials
 
 challenges:
-  domain: challenge.dhm-ctf.de
+  domain: challenges.dhm-ctf.de
   namespace: challenges
   registry: harbor.dhm-ctf.de/internal/challenges
   registryCredentialName: registry-credentials
