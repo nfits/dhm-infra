@@ -46,9 +46,8 @@ in
     firewall = {
       filterForward = true;
 
-      # TODO: Remove management access to everything, used for testing
       extraForwardRules = ''
-        iifname { organisers, management } accept comment "organisers have full access"
+        iifname { organisers } accept comment "organisers have full access"
         iifname != { guests } oifname { services } accept comment "everyone but guests have access to services"
       '';
     };

@@ -33,3 +33,22 @@ Due to constraints al VLANs are offset by +2000.
 | Guests        | 256                    | 10.249.0.0/16                    | guest.       |
 | Cluster Pod   | - (Routed via Cluster) | 10.250.0.0/16 (Pod IP Range)     |              |
 | Cluster Svc   | - (Routed via Cluster) | 10.251.0.0/16 (Service IP Range) |              |
+
+## Access
+
+### Wireguard Config Template
+
+```
+[Interface]
+Address = 10.247.0.<ip>/32
+# Uncomment if you need dns
+# DNS = 10.248.5.1
+# Uncomment if you use systemd-resolved (test via `resolvectl`), this limits dns requests only to our domain
+# PostUp = resolvectl domain %i ~dhm-ctf.de
+PrivateKey = <private-key>
+
+[Peer]
+PublicKey = gMyOiGbFTPFH4OusZghGWohkPY/SBekMuNckK2nw7xY=
+AllowedIPs = 10.248.0.0/14
+Endpoint = 194.95.66.251:51820
+```

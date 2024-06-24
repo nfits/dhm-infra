@@ -63,7 +63,11 @@ in
       organisers = {
         dns.subdomain = "orga";
 
-        dhcp = dhcpDefault 5;
+        dhcp = (dhcpDefault 5) // {
+          staticLeases = {
+            vpn-gateway = { ip = subnet24Ip 5 2; mac = "bc:24:11:1a:bf:7a"; };
+          };
+        };
 
         ipv4 = ipv4Default 5;
         vlanId = vlanOffset + 5;
