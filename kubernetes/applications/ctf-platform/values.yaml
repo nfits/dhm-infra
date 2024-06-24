@@ -6,6 +6,9 @@ auth:
       - "684313101465550879" # Patrick (NFITS)
       - "148458355860570112" # Daniel (NFITS)
       - "474659539803701259" # Alain (NFITS)
+      - "534109324193300503" # Felipe (NFITS)
+      - "469574966279667712" # Thomas (NFITS)
+      - "731828453367742506" # Kolja (NFITS)
 
 api:
   image:

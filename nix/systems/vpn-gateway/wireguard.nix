@@ -31,6 +31,21 @@
           publicKey = "nEngiH/1RsQZp3ms5zoWhfwYnxsrdxw7B7Wd/ElLuQU=";
           allowedIPs = [ "10.247.0.4/32" ];
         }
+        # Felipe (NFITS)
+        {
+          publicKey = "e/2cazrNY8kdVlGW9qBvne6jLIsi4OUCCGIIMO4EXEQ=";
+          allowedIPs = [ "10.247.0.5/32" ];
+        }
+        # Thomas (NFITS)
+        {
+          publicKey = "YRJDowQbkOnlcG/8kIo1/zHiMz9JX98fkr//aimVWAY=";
+          allowedIPs = [ "10.247.0.6/32" ];
+        }
+        # Kolja (NFITS)
+        {
+          publicKey = "sDka5SCnnxNxE95U/qMIqD2UZc0bqqRr8xL8o3tT4Gg=";
+          allowedIPs = [ "10.247.0.7/32" ];
+        }
       ];
     };
 
