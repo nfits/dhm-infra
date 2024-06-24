@@ -1,3 +1,7 @@
+auth:
+    discord:
+        clientId: ENC[AES256_GCM,data:ApUJP5a34hDshOhhipLHQyqp8A==,iv:y9iNkYXpds6k1r31kk4UHGs4r4Hehezo8gPJKxmy1E4=,tag:BtWGTbxt9d3H+Up4iKP1mg==,type:str]
+        clientSecret: ENC[AES256_GCM,data:k8HISvLQuI44V3L/DQil4JbRVio7T/Qn6wjeUr92VHM=,iv:3g0CNoiR+4PaUw7ACSfrMl23tp4LRR4t3dm8FZfSFFg=,tag:GFZbY3pRIizE59Qo4rgdEw==,type:str]
 extraSecretsDeploy:
     - apiVersion: ENC[AES256_GCM,data:dqE=,iv:NKiX1Bu0Em34jFHq/MrUreWUMmmfv2a93lND0r+JVAw=,tag:U3ZjoV2cehzW3Q026OL0ow==,type:str]
       kind: ENC[AES256_GCM,data:Qid8COvH,iv:4hZkU9cFxCmh6jjI8Mj6joJAi05RzdlHjRRw455xYq8=,tag:t8ZJY4d6Z6HOAeNAr8vG7Q==,type:str]
@@ -29,8 +33,8 @@ sops:
             M2pyZnNMeXFJeGIxTkozUWhxRjEycXMK9DJghROOMMzfZ75iM/CzS9zBSY2KBqZ5
             MFexabhVV8Hre7C/WeMlYDB4CJNhUf7RJHbNtH7gtbzqpzXzfahYeg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-06-23T05:48:55Z"
-    mac: ENC[AES256_GCM,data:ONJ/95wT02BVUnAf9+qNRR7onclGU0v3Kt8f2M06DZDzCqYPZHsB4SlZ63/Schf4hU2en1An82kQ+ZDOprefkgJ5ytE93wT/Fw95/DZEaCVTG1DVy9mLMSFTZmfkTwSKkuboe43c6tp6XSTebUqbGAA4x5vdZt4nf8veZjkKm38=,iv:BSy7vzO8Blz5DdjraPX1I7jA+GJTDd2B7v9EatHvrc4=,tag:kucLvrulqU8gPPaR9stEvA==,type:str]
+    lastmodified: "2024-06-24T11:03:58Z"
+    mac: ENC[AES256_GCM,data:v9NGlR3fYqWRjP6GTvKknfGKUww2XBxx+USD6Qx10kietDAjm2oWJrHaRhwBzlGoBXakSJ5Hf8nhtCz0M0gs5dJxbbCPkQtGCKOUt/s0PY/fPxESYyK4h3KMSfOl9cBQ7gvheZjfj29LMDRYlfos9FjO4OFVUvIkZJ0IoZ4dYxQ=,iv:VsMdKTGaccHnrzrcssT8BvAyuOgyfk9qgzmGHjyMCAc=,tag:5uCVflqll//DOw+w5/qzLQ==,type:str]
     pgp:
         - created_at: "2024-06-24T09:58:49Z"
           enc: |-

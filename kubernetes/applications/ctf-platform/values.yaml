@@ -1,3 +1,11 @@
+auth:
+  discord:
+    enabled: true
+
+    admins:
+      - "684313101465550879" # Patrick (NFITS)
+      - "148458355860570112" # Daniel (NFITS)
+
 api:
   image:
     repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/platform
