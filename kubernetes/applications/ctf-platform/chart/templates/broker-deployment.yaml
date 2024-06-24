@@ -43,7 +43,7 @@ spec:
           imagePullPolicy: {{ .Values.broker.image.pullPolicy }}
           ports:
             - name: tls
-              containerPort: 1337
+              containerPort: {{ .Values.broker.config.tls.port }}
               protocol: TCP
           command:
             - platform
@@ -73,7 +73,7 @@ spec:
           imagePullPolicy: {{ .Values.broker.image.pullPolicy }}
           ports:
             - name: ssh
-              containerPort: 2222
+              containerPort: {{ .Values.broker.config.ssh.port }}
               protocol: TCP
           command:
             - platform

@@ -6,7 +6,7 @@ api:
     url: "https://api.dhm-ctf.de"
 
   grpcRoute:
-    enabled: true
+    enabled: false
     hostnames:
       - api.dhm-ctf.de
 
@@ -130,4 +130,68 @@ extraDeploy:
         group: cert-manager.io
         kind: ClusterIssuer
         name: letsencrypt
-
+  # TODO: Debug why nginx doesn't work
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: ctf-platform-api-proxy
+      namespace: gateway-system
+    data:
+      Caddyfile: |
+        api.dhm-ctf.de {
+          tls /cert/tls.crt /cert/tls.key
+          reverse_proxy ctf-platform-api.ctf-platform.svc:80
+        }
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ctf-platform-api-proxy
+      namespace: gateway-system
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: "api.dhm-ctf.de"
+    spec:
+      type: LoadBalancer
+      selector:
+        app.kubernetes.io/name: ctf-platform-api-proxy
+      ports:
+        - port: 443
+          targetPort: https
+          protocol: TCP
+  - apiVersion: apps/v1
+    kind: DaemonSet
+    metadata:
+      name: ctf-platform-api-proxy
+      namespace: gateway-system
+    spec:
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: ctf-platform-api-proxy
+      template:
+        metadata:
+          name: api
+          labels:
+            app.kubernetes.io/name: ctf-platform-api-proxy
+        spec:
+          containers:
+            - name: caddy
+              image: caddy
+              imagePullPolicy: Always
+              volumeMounts:
+                - mountPath: /etc/caddy/Caddyfile
+                  name: config
+                  subPath: "Caddyfile"
+                  readOnly: true
+                - mountPath: /cert
+                  name: tls
+                  readOnly: true
+              ports:
+                - containerPort: 443
+                  name: https
+          volumes:
+            - name: config
+              configMap:
+                name: ctf-platform-api-proxy
+            - name: tls
+              secret:
+                secretName: main-tls
+          restartPolicy: Always

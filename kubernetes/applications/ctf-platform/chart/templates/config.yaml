@@ -9,8 +9,8 @@ stringData:
     {
       "broker": {
         "enable": true,
-        "tlsPort": 1337,
-        "sshPort": 2222,
+        "tlsPort": {{ .Values.broker.config.tls.port }},
+        "sshPort": {{ .Values.broker.config.ssh.port }},
         "powDifficulty": {{ .Values.api.config.powDifficulty }},
         "tlsKeyPath": "/cert/tls.key",
         "tlsCertPath": "/cert/tls.crt",
