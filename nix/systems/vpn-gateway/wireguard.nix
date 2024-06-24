@@ -26,6 +26,11 @@
           publicKey = "EeVgH86U0pnjWwgKQJ5kzroddj+jtZUsuCH/kL2k0jw=";
           allowedIPs = [ "10.247.0.3/32" ];
         }
+        # Alain (NFITS)
+        {
+          publicKey = "nEngiH/1RsQZp3ms5zoWhfwYnxsrdxw7B7Wd/ElLuQU=";
+          allowedIPs = [ "10.247.0.4/32" ];
+        }
       ];
     };
 

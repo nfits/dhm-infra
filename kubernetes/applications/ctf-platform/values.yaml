@@ -5,6 +5,7 @@ auth:
     admins:
       - "684313101465550879" # Patrick (NFITS)
       - "148458355860570112" # Daniel (NFITS)
+      - "474659539803701259" # Alain (NFITS)
 
 api:
   image:
