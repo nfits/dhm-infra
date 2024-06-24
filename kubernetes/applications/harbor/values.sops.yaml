@@ -1,5 +1,5 @@
 secretKey: ENC[AES256_GCM,data:HZuBJIZTMdcHheGCuhqO6Q==,iv:ErHvC+nh/AFTzMohM1Vpyb4schZtmT7fP6GgsDSnii0=,tag:Ui00RhuVGqbcRQcpeikYtw==,type:str]
-harborAdminPassword: ENC[AES256_GCM,data:4vGqGiSyOY4njpO+PQ==,iv:YHrL2hA0ypQbymd//gR9MWRFDqU9d32dso/Yk1RjMnY=,tag:ppm/NXTveGz2rPCDgFJllw==,type:str]
+harborAdminPassword: ENC[AES256_GCM,data:iISDZ1tPc+5NucWWj2ag6WYZfDUNqda+p9AvGg==,iv:oCuhCyJ2+MVDr5p8aeER/sgifxJSlO6DRkK4xAda7Jc=,tag:qOzlahNKxL5j74hfEK/RlA==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -15,8 +15,8 @@ sops:
             aFB5V1BpQkw0NUpDdTI0b3pJekRpMzAKrVEu/nB7DuV33kYNRA77lHHN4jJ8r8Bd
             XKaVICF5a1/o7P/5TFe0ZDjZXI+v2OLUHmo6EGJeXhqNJ+T7W6k2Ow==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-06-21T17:27:58Z"
-    mac: ENC[AES256_GCM,data:wWX5iPBsi139eqN1329EgXivAHxMzRzjNeiqstISMmPt9mgMDCNU4pJIXPe+AvSFWEl49xQt+xQCb2AtyOJGcSeYJxoeucKqvQNqsPdOFi8ZZoEf44tJSfiWl7oEtX7joXoHhkEEeyAi7ihSxHE3h7A6+nggt0CKcOuE/3RvDMg=,iv:9lkM5F19IgaNj+4mWp5L377nqOA5xmn5pzCY3DqoN3A=,tag:J7gMvVLIJIKhYgotJvWs3w==,type:str]
+    lastmodified: "2024-06-24T21:39:42Z"
+    mac: ENC[AES256_GCM,data:ihs/++W8Dv0I/tsObgc+N5seVS7H6k8jXZ0+2u73gXPHkh9qK7qpqsLQgux/MYbF4buqy+uHmtjSnCpf8HH8+V7MpjRBjnM5ZZ/vVmBkNt7FDxhGiPglTigCB9VvOr0J1aYEE2aHxbeRGkAhxQFbDLGdXKV5vIMzYUxuyp6GTyY=,iv:p5SrqWSWKzKjdpTtlfZ7tdEFN/hDVXcX1azRQ8Eq8R0=,tag:3bdarfC9tQ+qmmGfCB6zMg==,type:str]
     pgp:
         - created_at: "2024-06-24T17:49:55Z"
           enc: |-

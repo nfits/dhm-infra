@@ -1,8 +1,6 @@
 configs:
     secret:
-        #ENC[AES256_GCM,data:H61Q14qD+MpGJaRCwyo=,iv:SJqs6u5zra/0ISXGCjYxeBu1CHxp2DQ8fddjcT5aKRc=,tag:NRVSE4JloOHKdgxU8y4amA==,type:comment]
-        #ENC[AES256_GCM,data:ckRMr2qvbiuB+A==,iv:ifhlXOa0DGNyXk6wfM5HVBlliQSw1/ciUB3nwArGrtY=,tag:sN6uGFHbjHl5Au9vcqHuqQ==,type:comment]
-        argocdServerAdminPassword: ENC[AES256_GCM,data:+JwvSD0WrjKAPQa/2ZEjE2z/UoF4PnkhTZEMOElZK1PV5zkUjgcd4YgemyTo6bCVnb23gruEy8wqgr5q,iv:jhS1iNL1Jwx/SkUq1pWPE3NbQtV+g2j4sQ25J06o8fY=,tag:KsZGWobmaUoMyjHuklc1Wg==,type:str]
+        argocdServerAdminPassword: ENC[AES256_GCM,data:EZ1EbbICRKCM0DUGw5sDzzEOVW2tQHcgQKxD1zHVoPZ+Kq7omVBLxCHUvSTiYetKl/3ACmx15AGfIFvV,iv:QWjG4zRjBC3TodivoM2X5M2994EwKdyH9p2kH6xSFe4=,tag:L15ODRPS9gFC4LcXJCwB2Q==,type:str]
 notifications:
     notifiers:
         service.github: ENC[AES256_GCM,data:m4fo1g7MrNH7XtQ2qPETYeJQ/NOPN+S5qjhUOyi/L2ecxuNaTjIQAneHhst4OFbBhpS1XNu4ktly6aGDQWflo7m0K4lR,iv:Dsu1oxKvY5L3kwMGPLwTvLJhZ5L2uump5lE8WBEOOYY=,tag:xZUpFNvUcFY1DrR+xWs1fQ==,type:str]
@@ -60,8 +58,8 @@ sops:
             b3BscURkUzlyR01YanlMdGp6S1ROMTgKAT7GijNU1Wvnanaq/BDZM4x8E5m+uCCE
             M2RfY0quLvZj4h6NArEBsRkych2aCRmqw4z0gazofyuPNhWQqxf/+w==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-06-21T19:14:08Z"
-    mac: ENC[AES256_GCM,data:Sz05i7i1LGMG3cEsWQ4TizvluFzseeizw5v+bnrQuWIcOIgRf5iWOdJx/4hwwPPaeZXThucf5hsDKH6Ws1RM3ft4CWVTxFDC5WthfufJ0LFSoY0FlvKFGts3Dusfbk7nDy1K7Cg0OKThomZOUXWYxvFLv6t4Kt9BThvQ3RaF/vw=,iv:g0vIV2KYKZ91p0keWMQTKo4MymOF9zq/mPmFZl9dSyk=,tag:L8Ma0vPOsf4orPGP5EqtUg==,type:str]
+    lastmodified: "2024-06-24T21:39:14Z"
+    mac: ENC[AES256_GCM,data:R5YBAwR3LfgCtox8fDiHnC5YtJVPNaCkRtYNLykWb3VPSuYKKxjKllkTbjiuscFWYOeCGNVsAqb51xHWwOXMWPb1Zdit74Y2G9xaze7W88yF/b7BJyiA992F6n0e2zYV26MHdegW1NMSYw02Kz+wW3jqI5Iw4D+1kUWmHjbh0fg=,iv:ASTSt/n9W7SyCPGJOKwBVs1tQQj2XRrh1Eqiw2vaNk8=,tag:ld/WBIg633K/jwVGxZEiCg==,type:str]
     pgp:
         - created_at: "2024-06-24T17:49:58Z"
           enc: |-
