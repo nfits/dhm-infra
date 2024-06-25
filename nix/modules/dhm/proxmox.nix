@@ -15,7 +15,13 @@ in
 
   config = mkIf cfg.isProxmoxVM {
     boot = {
-      initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "sr_mod" "virtio_blk" ];
+      initrd.availableKernelModules = [
+        "ata_piix"
+        "uhci_hcd"
+        "virtio_pci"
+        "sr_mod"
+        "virtio_blk"
+      ];
       kernelModules = [ "kvm-intel" ];
 
       # We are on UEFI
@@ -34,7 +40,10 @@ in
       "/boot" = {
         device = "/dev/disk/by-label/BOOT";
         fsType = "vfat";
-        options = [ "fmask=0022" "dmask=0022" ];
+        options = [
+          "fmask=0022"
+          "dmask=0022"
+        ];
       };
     };
 

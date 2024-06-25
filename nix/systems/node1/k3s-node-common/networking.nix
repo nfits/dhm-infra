@@ -12,19 +12,17 @@ let
 in
 {
   systemd.network = {
-    netdevs = mapAttrs'
-      (n: v: {
-        name = "20-${n}";
-        value = {
-          netdevConfig = {
-            Kind = "vlan";
-            Name = n;
-          };
-
-          vlanConfig.Id = v.vlanId;
+    netdevs = mapAttrs' (n: v: {
+      name = "20-${n}";
+      value = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = n;
         };
-      })
-      (filterAttrs (name: _: elem name [ "cluster" ]) cfg.vlans);
+
+        vlanConfig.Id = v.vlanId;
+      };
+    }) (filterAttrs (name: _: elem name [ "cluster" ]) cfg.vlans);
 
     networks = {
       "30-uplink" = {
@@ -43,7 +41,9 @@ in
         linkConfig.RequiredForOnline = "routable";
 
         address = [
-          "${cfg.vlans.cluster.dhcp.staticLeases.${config.networking.hostName}.ip}/${toString cfg.vlans.cluster.ipv4.prefixLength}"
+          "${
+            cfg.vlans.cluster.dhcp.staticLeases.${config.networking.hostName}.ip
+          }/${toString cfg.vlans.cluster.ipv4.prefixLength}"
         ];
         gateway = [ cfg.vlans.cluster.ipv4.routerAddress ];
         dns = [ cfg.vlans.cluster.ipv4.routerAddress ];

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -50,14 +55,19 @@ let
           "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/run/current-system/sw/bin"
         ];
         Cmd = [ "longhorn" ];
-        Entrypoint = [ "/tini" "--" ];
+        Entrypoint = [
+          "/tini"
+          "--"
+        ];
       };
     })
     (streamLayeredImage rec {
       name = "dhm-ctf.de/nixos-built/github-actions-runner";
       tag = "latest";
 
-      contents = with pkgs; with dockerTools;
+      contents =
+        with pkgs;
+        with dockerTools;
         let
           post-build-hook = writeShellScriptBin "post-build-hook" ''
             if [ -d /mnt/ci-nix ]; then
@@ -89,30 +99,21 @@ let
           '')
 
           (fakeNss.override {
-            extraPasswdLines = [
-              "nixbld:x:1000:1000:Build user:/build:/noshell"
-            ];
+            extraPasswdLines = [ "nixbld:x:1000:1000:Build user:/build:/noshell" ];
 
-            extraGroupLines = [
-              "nixbld:!:1000:"
-            ];
+            extraGroupLines = [ "nixbld:!:1000:" ];
           })
 
-          (writeTextDir "/etc/containers/policy.json" (builtins.toJSON
-            {
-              "default" = [
-                {
-                  "type" = "insecureAcceptAnything";
-                }
-              ];
-              "transports" =
-                {
-                  "docker-daemon" =
-                    {
-                      "" = [{ "type" = "insecureAcceptAnything"; }];
-                    };
+          (writeTextDir "/etc/containers/policy.json" (
+            builtins.toJSON {
+              "default" = [ { "type" = "insecureAcceptAnything"; } ];
+              "transports" = {
+                "docker-daemon" = {
+                  "" = [ { "type" = "insecureAcceptAnything"; } ];
                 };
-            }))
+              };
+            }
+          ))
 
           (stdenvNoCC.mkDerivation rec {
             version = "0.5.0";
@@ -129,7 +130,6 @@ let
             '';
           })
         ];
-
 
       fakeRootCommands = ''
         mkdir -p ./nix/{store,var/nix} ./etc/nix
@@ -170,26 +170,25 @@ in
     };
 
     environment = {
-      systemPackages = with pkgs; [
-        # Required by longhorn
-        nfs-utils
-        openiscsi
-      ] ++ optionals (cfg.role == "server") [
-        # Management
-        (wrapHelm kubernetes-helm {
-          plugins = with kubernetes-helmPlugins; [ helm-secrets ];
-        })
+      systemPackages =
+        with pkgs;
+        [
+          # Required by longhorn
+          nfs-utils
+          openiscsi
+        ]
+        ++ optionals (cfg.role == "server") [
+          # Management
+          (wrapHelm kubernetes-helm { plugins = with kubernetes-helmPlugins; [ helm-secrets ]; })
 
-        k9s
-        kubectl
-        kustomize
-        kustomize-sops
-        sops
-      ];
+          k9s
+          kubectl
+          kustomize
+          kustomize-sops
+          sops
+        ];
 
-      variables = mkIf (cfg.role == "server") {
-        KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
-      };
+      variables = mkIf (cfg.role == "server") { KUBECONFIG = "/etc/rancher/k3s/k3s.yaml"; };
     };
 
     networking.firewall = {
@@ -201,47 +200,52 @@ in
         ip saddr { ${podCIDR}, ${svcCIDR} } accept comment "Kubernetes Pods / Services"
       '';
 
-      allowedTCPPorts = [
-        4240 # healthchecks
-        4244 # hubble server
-        4245 # hubble relay
-        10250 # kubelet
-      ] ++ optionals (cfg.role == "server") [
-        6443 # API
-        5001 # distributed internal registry
-        2379 # etcd clients
-        2380 # etcd peers
-      ];
+      allowedTCPPorts =
+        [
+          4240 # healthchecks
+          4244 # hubble server
+          4245 # hubble relay
+          10250 # kubelet
+        ]
+        ++ optionals (cfg.role == "server") [
+          6443 # API
+          5001 # distributed internal registry
+          2379 # etcd clients
+          2380 # etcd peers
+        ];
     };
 
     services = {
       # NOTE: The update settings are quite extreme, but due to the nodes being in the same rack this is fine
-      k3s.extraFlags = concatStringsSep " " ([
-        "--flannel-backend=none"
-        "--node-name=${config.networking.hostName}"
-        "--node-label=node.longhorn.io/create-default-disk=true"
+      k3s.extraFlags = concatStringsSep " " (
+        [
+          "--flannel-backend=none"
+          "--node-name=${config.networking.hostName}"
+          "--node-label=node.longhorn.io/create-default-disk=true"
 
-        "--kubelet-arg=node-status-update-frequency=4s"
-      ] ++ optionals (cfg.role == "server") [
-        "--disable-helm-controller"
-        "--disable-network-policy"
-        "--disable local-storage"
-        "--disable servicelb"
-        "--disable kube-proxy"
-        "--disable traefik"
+          "--kubelet-arg=node-status-update-frequency=4s"
+        ]
+        ++ optionals (cfg.role == "server") [
+          "--disable-helm-controller"
+          "--disable-network-policy"
+          "--disable local-storage"
+          "--disable servicelb"
+          "--disable kube-proxy"
+          "--disable traefik"
 
-        "--embedded-registry"
+          "--embedded-registry"
 
-        "--kube-controller-manager-arg=node-monitor-period=2s"
-        "--kube-controller-manager-arg=node-monitor-grace-period=16s"
+          "--kube-controller-manager-arg=node-monitor-period=2s"
+          "--kube-controller-manager-arg=node-monitor-grace-period=16s"
 
-        "--cluster-cidr=${podCIDR}"
-        "--service-cidr=${svcCIDR}"
-        "--cluster-dns=${dnsIP}"
+          "--cluster-cidr=${podCIDR}"
+          "--service-cidr=${svcCIDR}"
+          "--cluster-dns=${dnsIP}"
 
-        "--tls-san=${rrDomain}"
-        "--tls-san=${config.networking.fqdn}"
-      ]);
+          "--tls-san=${rrDomain}"
+          "--tls-san=${config.networking.fqdn}"
+        ]
+      );
 
       openiscsi = {
         enable = true;
@@ -261,9 +265,7 @@ in
 
         echo "k3s available."
 
-        ${concatStringsSep "\n" (map
-          (v: "${v} | ctr -n k8s.io image import -")
-          images)}
+        ${concatStringsSep "\n" (map (v: "${v} | ctr -n k8s.io image import -") images)}
       '';
 
       requires = [ "k3s.service" ];

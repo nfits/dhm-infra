@@ -2,7 +2,5 @@
 
 with lib;
 {
-  networking = mkDefault {
-    nftables.enable = true;
-  };
+  networking = mkDefault { nftables.enable = true; };
 }

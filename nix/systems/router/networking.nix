@@ -24,7 +24,11 @@ let
       address = [ "${cfg.ipv4.routerAddress}/${toString cfg.ipv4.prefixLength}" ];
       gateway = optional (cfg.ipv4.gateway != null) "${cfg.ipv4.gateway}";
 
-      routes = map (subnet: { routeConfig = { Destination = subnet; }; }) cfg.ipv4.routedSubnets;
+      routes = map (subnet: {
+        routeConfig = {
+          Destination = subnet;
+        };
+      }) cfg.ipv4.routedSubnets;
 
       linkConfig.RequiredForOnline = "routable";
     };
@@ -54,24 +58,31 @@ in
   };
 
   systemd.network = {
-    netdevs = mapAttrs' (n: v: { name = "20-${n}"; value = v.netdev; }) dhmVlans;
+    netdevs = mapAttrs' (n: v: {
+      name = "20-${n}";
+      value = v.netdev;
+    }) dhmVlans;
 
-    networks = recursiveUpdate
-      (mapAttrs' (n: v: { name = "40-${n}"; value = v.network; }) dhmVlans)
-      {
-        "30-rack" = {
-          matchConfig.PermanentMACAddress = "bc:24:11:7b:38:f8";
+    networks =
+      recursiveUpdate
+        (mapAttrs' (n: v: {
+          name = "40-${n}";
+          value = v.network;
+        }) dhmVlans)
+        {
+          "30-rack" = {
+            matchConfig.PermanentMACAddress = "bc:24:11:7b:38:f8";
 
-          networkConfig = {
-            DHCP = "no";
-            IPv6AcceptRA = "no";
-            LinkLocalAddressing = "no";
+            networkConfig = {
+              DHCP = "no";
+              IPv6AcceptRA = "no";
+              LinkLocalAddressing = "no";
+            };
+
+            linkConfig.RequiredForOnline = "carrier";
+
+            vlan = attrNames dhmVlans;
           };
-
-          linkConfig.RequiredForOnline = "carrier";
-
-          vlan = attrNames dhmVlans;
         };
-      };
   };
 }

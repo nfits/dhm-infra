@@ -27,7 +27,10 @@ in
       cluster = {
         dhcp = (dhcpDefault 2) // {
           staticLeases = {
-            node1 = { ip = subnet24Ip 2 11; mac = "bc:24:11:40:47:ec"; };
+            node1 = {
+              ip = subnet24Ip 2 11;
+              mac = "bc:24:11:40:47:ec";
+            };
           };
         };
 
@@ -37,7 +40,9 @@ in
           ];
         };
 
-        ipv4 = ipv4Default 2 // { routedSubnets = [ "10.248.3.0/24" ]; };
+        ipv4 = ipv4Default 2 // {
+          routedSubnets = [ "10.248.3.0/24" ];
+        };
         vlanId = vlanOffset + 2;
       };
 
@@ -51,8 +56,14 @@ in
       management = {
         dhcp = (dhcpDefault 4) // {
           staticLeases = {
-            node1 = { ip = subnet24Ip 4 11; mac = "42:66:b5:cc:90:11"; };
-            node2 = { ip = subnet24Ip 4 12; mac = "52:34:f0:6e:06:02"; };
+            node1 = {
+              ip = subnet24Ip 4 11;
+              mac = "42:66:b5:cc:90:11";
+            };
+            node2 = {
+              ip = subnet24Ip 4 12;
+              mac = "52:34:f0:6e:06:02";
+            };
           };
         };
 
@@ -65,7 +76,10 @@ in
 
         dhcp = (dhcpDefault 5) // {
           staticLeases = {
-            vpn-gateway = { ip = subnet24Ip 5 2; mac = "bc:24:11:1a:bf:7a"; };
+            vpn-gateway = {
+              ip = subnet24Ip 5 2;
+              mac = "bc:24:11:1a:bf:7a";
+            };
           };
         };
 
