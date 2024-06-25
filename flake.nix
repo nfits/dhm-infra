@@ -37,6 +37,7 @@
         {
           checks = callDir ./nix/checks;
           devShells = callDir ./nix/shells;
+          formatter = pkgs.nixfmt-rfc-style;
         }) // {
       nixosModules = with builtins; with nixpkgs.lib; mapAttrs
         (n: _: import ./nix/modules/${n})

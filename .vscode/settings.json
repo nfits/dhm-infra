@@ -1,0 +1,22 @@
+{
+    "nix.serverPath": "nixd",
+    "nix.enableLanguageServer": true,
+    "nix.serverSettings": {
+        "nixd": {
+            "formatting": {
+                "command": [
+                    "nix",
+                    "fmt",
+                    "--",
+                    "-"
+                ]
+            },
+            "options": {},
+            "diagnostic": {
+                "suppress": [
+                  "sema-escaping-with"
+                ]
+              }
+        }
+    }
+}
