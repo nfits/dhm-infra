@@ -52,3 +52,13 @@ PublicKey = gMyOiGbFTPFH4OusZghGWohkPY/SBekMuNckK2nw7xY=
 AllowedIPs = 10.248.0.0/14
 Endpoint = 194.95.66.251:51820
 ```
+
+### Development Setup
+
+This flake has a devShell with pre-commit hooks for formatting and statix
+
+For direnv support:
+```
+echo "use flake" >.envrc
+direnv allow
+```
