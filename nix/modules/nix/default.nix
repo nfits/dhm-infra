@@ -1,11 +1,16 @@
-{ lib, pkgs, inputs, ... }:
+{
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 with builtins;
 with lib;
 {
-  imports = mapAttrsToList
-    (n: _: ./${n})
-    (filterAttrs (n: t: n != "default.nix" && t == "regular") (readDir ./.));
+  imports = mapAttrsToList (n: _: ./${n}) (
+    filterAttrs (n: t: n != "default.nix" && t == "regular") (readDir ./.)
+  );
 
   nix = mkDefault {
     package = pkgs.nixFlakes;
