@@ -26,7 +26,12 @@ spec:
         volumeMounts:
         - name: kubelet
           mountPath: /var/lib/kubelet
+        - name: cdi-json
+          mountPath: /etc/cdi/nfits.json
       volumes:
       - name: kubelet
         hostPath:
           path: /var/lib/kubelet
+      - name: cdi-json
+        hostPath:
+          path: /etc/cdi/nfits.json
