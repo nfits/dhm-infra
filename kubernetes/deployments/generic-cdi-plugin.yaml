@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: generic-cdi-plugin
+spec:
+  project: default
+  destination:
+    namespace: generic-cdi-plugin
+    name: in-cluster
+  source:
+    path: kubernetes/applications/generic-cdi-plugin
+    repoURL: https://github.com/nfits/dhm-infra.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
