@@ -1,6 +1,6 @@
 configs:
     secret:
-        argocdServerAdminPassword: ENC[AES256_GCM,data:EZ1EbbICRKCM0DUGw5sDzzEOVW2tQHcgQKxD1zHVoPZ+Kq7omVBLxCHUvSTiYetKl/3ACmx15AGfIFvV,iv:QWjG4zRjBC3TodivoM2X5M2994EwKdyH9p2kH6xSFe4=,tag:L15ODRPS9gFC4LcXJCwB2Q==,type:str]
+        argocdServerAdminPassword: ENC[AES256_GCM,data:B8MRzHEyaV8vMK8hJYHYlZauGm4+wvY2MnVHgsnZ5+2cqdx4rje6DfhaAfnPmdjZ6nhzHgfM4l2WcXWE,iv:d6uyo0fhgyY956KkPOf8eA1WYHW2DqZ6MV/H9Tov078=,tag:jCUrJJKJiQv30BHETB5rcg==,type:str]
 notifications:
     notifiers:
         service.github: ENC[AES256_GCM,data:m4fo1g7MrNH7XtQ2qPETYeJQ/NOPN+S5qjhUOyi/L2ecxuNaTjIQAneHhst4OFbBhpS1XNu4ktly6aGDQWflo7m0K4lR,iv:Dsu1oxKvY5L3kwMGPLwTvLJhZ5L2uump5lE8WBEOOYY=,tag:xZUpFNvUcFY1DrR+xWs1fQ==,type:str]
@@ -58,8 +58,8 @@ sops:
             b3BscURkUzlyR01YanlMdGp6S1ROMTgKAT7GijNU1Wvnanaq/BDZM4x8E5m+uCCE
             M2RfY0quLvZj4h6NArEBsRkych2aCRmqw4z0gazofyuPNhWQqxf/+w==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-06-24T21:39:14Z"
-    mac: ENC[AES256_GCM,data:R5YBAwR3LfgCtox8fDiHnC5YtJVPNaCkRtYNLykWb3VPSuYKKxjKllkTbjiuscFWYOeCGNVsAqb51xHWwOXMWPb1Zdit74Y2G9xaze7W88yF/b7BJyiA992F6n0e2zYV26MHdegW1NMSYw02Kz+wW3jqI5Iw4D+1kUWmHjbh0fg=,iv:ASTSt/n9W7SyCPGJOKwBVs1tQQj2XRrh1Eqiw2vaNk8=,tag:ld/WBIg633K/jwVGxZEiCg==,type:str]
+    lastmodified: "2024-06-26T22:18:44Z"
+    mac: ENC[AES256_GCM,data:4ph92VQTqpPighQqtR5j34fELQZfH5iVwOlWFDFA/RdvxkuEbb4bcflXWXwdG0mzGAsl6+kXxTwCcI72X+pupqtJwYnJrzscGfexwZKgBAubdjfW7F/76xS1B5p6ASJRiXW95DEhNYMGmgUBkv4NglG7sdlDQkLRfc3u/XLeIcc=,iv:+qGr/frlJDkC7ys4kTxmMOn76xSimDy8O0Q1utH41FQ=,tag:wyvQaG/0FOkO+bEiHf0u9w==,type:str]
     pgp:
         - created_at: "2024-06-24T17:49:58Z"
           enc: |-
