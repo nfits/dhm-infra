@@ -84,6 +84,8 @@ template:
             mountPath: /etc/hook-extension
           - name: buildkit
             mountPath: /mnt/buildkit
+          - name: ci-nix-cache
+            mountPath: "/mnt/ci-nix"
       - name: buildkit
         args:
           - --addr
@@ -128,6 +130,9 @@ template:
           items:
             - key: content
               path: template.yaml
+      - name: ci-nix-cache
+        persistentVolumeClaim:
+          claimName: ci-nix-cache
 
 ## Optional controller service account that needs to have required Role and RoleBinding
 ## to operate this gha-runner-scale-set installation.
