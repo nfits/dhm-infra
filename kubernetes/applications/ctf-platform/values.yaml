@@ -11,6 +11,11 @@ auth:
       - "731828453367742506" # Kolja (NFITS)
       - "166211731503316993" # Tobias (FluxFingers, External Authors)
       - "488765441032847394" # Felix (FluxFingers, External Authors)
+      - "367674689449099264" # Gina (RedRocket)
+      - "316999264792346635" # Tobias (NFITS)
+      - "305018323907641344" # Jan-Niklas (RedRocket)
+      - "226729542734053377" # Lukas (lukas2511) (RedRocket)
+      - "217696462371422208" # Lukas (RedRocket)
 
 api:
   image:

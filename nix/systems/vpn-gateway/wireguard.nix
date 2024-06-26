@@ -56,6 +56,31 @@
           publicKey = "uBV+CiQZuMLuIZFIAJOo5i3+4QD7IMvVR8k5AlOun10=";
           allowedIPs = [ "10.247.0.9/32" ];
         }
+        # Gina (RedRocket)
+        {
+          publicKey = "OHjPkg4WVc2WImE2+IbAZsLNzJxwhsD4enmDl6TXDm4=";
+          allowedIPs = [ "10.247.0.10/32" ];
+        }
+        # Tobias (NFITS)
+        {
+          publicKey = "V+v8EEbHtOeTUFFWY3jVJuJ0GdhsTJFgG1oSDpwZYCk=";
+          allowedIPs = [ "10.247.0.11/32" ];
+        }
+        # Jan-Niklas (RedRocket)
+        {
+          publicKey = "gK6Mum9zSzaeTUjX9t9f1ojN0jpNzJ+6a2BoHDnLc14=";
+          allowedIPs = [ "10.247.0.12/32" ];
+        }
+        # Lukas (lukas2511) (RedRocket)
+        {
+          publicKey = "gWW2yaWsgxRwvYilcylS5H2vVOPrRjnUGYgIdpcrPFI=";
+          allowedIPs = [ "10.247.0.13/32" ];
+        }
+        # Lukas (RedRocket)
+        {
+          publicKey = "zvI/8qN7vzthPk936N3arn2NDB1NuGgTI1Kft6mS70w=";
+          allowedIPs = [ "10.247.0.14/32" ];
+        }
       ];
     };
 
