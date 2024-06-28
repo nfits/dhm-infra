@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ctf-platform
+spec:
+  project: default
+  destination:
+    namespace: ctf-platform
+    name: in-cluster
+  sources:
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      path: kubernetes/applications/ctf-platform/chart
+      targetRevision: main
+      helm:
+        valueFiles:
+          - /kubernetes/applications/ctf-platform/values.yaml
+          - secrets://https://raw.githubusercontent.com/nfits/dhm-infra/main/kubernetes/applications/ctf-platform/values.sops.yaml
+        ignoreMissingValueFiles: false
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        gateway-access/main: "true"
+    syncOptions:
+      - CreateNamespace=true
