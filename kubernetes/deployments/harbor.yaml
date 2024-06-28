@@ -2,6 +2,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: harbor
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.github: ""
 spec:
   project: default
   destination:
