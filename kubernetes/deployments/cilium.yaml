@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+spec:
+  project: default
+  destination:
+    namespace: kube-system
+    name: in-cluster
+  sources:
+    - repoURL: "https://helm.cilium.io/"
+      chart: cilium
+      targetRevision: 1.15.6
+      helm:
+        valueFiles:
+          - $values/kubernetes/applications/cilium/values.yaml
+        ignoreMissingValueFiles: false
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      targetRevision: main
+      path: kubernetes/applications/cilium/extra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
