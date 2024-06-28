@@ -12,18 +12,22 @@ with lib;
     filterAttrs (n: t: n != "default.nix" && t == "regular") (readDir ./.)
   );
 
-  nix = mkDefault {
+  nix = {
     package = pkgs.nixFlakes;
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    settings = {
+      auto-optimise-store = true;
+
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
 
     registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
       (lib.filterAttrs (_: lib.isType "flake")) inputs
     );
 
-    gc = {
+    gc = mkDefault {
       automatic = true;
 
       dates = "weekly";
