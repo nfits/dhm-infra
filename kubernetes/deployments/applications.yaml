@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: applications
+spec:
+  project: default
+  destination:
+    namespace: argocd
+    name: in-cluster
+  source:
+    repoURL: https://github.com/nfits/dhm-infra.git
+    path: kubernetes/deployments
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
