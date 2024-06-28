@@ -16,6 +16,8 @@ auth:
       - "305018323907641344" # Jan-Niklas (RedRocket)
       - "226729542734053377" # Lukas (lukas2511) (RedRocket)
       - "217696462371422208" # Lukas (RedRocket)
+      - "222796095745556480" # Apfelsaft (Betatester (Tobi (NFITS)))
+      - "729418872045961359" # Ruben (RedRocket)
 
 api:
   image:

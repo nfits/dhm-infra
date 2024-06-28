@@ -81,6 +81,16 @@
           publicKey = "zvI/8qN7vzthPk936N3arn2NDB1NuGgTI1Kft6mS70w=";
           allowedIPs = [ "10.247.0.14/32" ];
         }
+        # Apfelsaft (Betatester (Tobi (NFITS)))
+        {
+          publicKey = "QAwrFCZdwGg61OnGlVeK/oLZkUvlWglpSm4k3jR0e0A=";
+          allowedIPs = [ "10.247.0.15/32" ];
+        }
+        # Ruben (RedRocket)
+        {
+          publicKey = "5Vbd/lkhyKwh6QWavAQ1R142fiL8PMJvLoHUa15p/Dk=";
+          allowedIPs = [ "10.247.0.16/32" ];
+        }
       ];
     };
 
