@@ -93,6 +93,8 @@ template:
           - --addr
           - unix:///mnt/buildkit/buildkitd.sock
           - --oci-worker-no-process-sandbox
+          - --config
+          - /etc/buildkit/buildkitd.toml
         readinessProbe:
           exec:
             command:
@@ -118,6 +120,8 @@ template:
         volumeMounts:
           - mountPath: /mnt/buildkit
             name: buildkit
+          - mountPath: /etc/buildkit
+            name: buildkit-config
     volumes:
       - name: buildkit
         emptyDir: { }
@@ -130,6 +134,9 @@ template:
           items:
             - key: content
               path: template.yaml
+      - name: buildkit-config
+        configMap:
+          name: buildkit-config
       - name: ci-nix-cache
         persistentVolumeClaim:
           claimName: ci-nix-cache
