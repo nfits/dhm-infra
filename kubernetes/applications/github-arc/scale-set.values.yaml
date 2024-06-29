@@ -52,6 +52,7 @@ template:
   metadata:
     annotations:
       container.apparmor.security.beta.kubernetes.io/buildkit: unconfined
+      container.apparmor.security.beta.kubernetes.io/dockerd: unconfined
   spec:
     serviceAccountName: platform-builder
     initContainers:
@@ -84,6 +85,8 @@ template:
             mountPath: /etc/hook-extension
           - name: buildkit
             mountPath: /mnt/buildkit
+          - name: dockerd
+            mountPath: /mnt/dockerd
           - name: ci-nix-cache
             mountPath: "/mnt/ci-nix"
       - name: buildkit
@@ -122,8 +125,23 @@ template:
             name: buildkit
           - mountPath: /etc/buildkit
             name: buildkit-config
+      - name: dockerd
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+        image: docker:27.0.2-dind-rootless
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: DOCKER_HOST
+            value: "unix:///mnt/dockerd/docker.sock"
+        resources: { }
+        volumeMounts:
+          - mountPath: /mnt/dockerd
+            name: dockerd
     volumes:
       - name: buildkit
+        emptyDir: { }
+      - name: dockerd
         emptyDir: { }
       - name: static-files
         persistentVolumeClaim:
