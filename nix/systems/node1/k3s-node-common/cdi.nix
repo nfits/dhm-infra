@@ -1,4 +1,5 @@
 { pkgs, ... }:
+
 {
   environment.etc."cdi/nfits.json".source = (pkgs.formats.json { }).generate "nfits-cdi.json" {
     cdiVersion = "0.5.0";

@@ -14,6 +14,8 @@ forceDeviceDetection: true
 
 kubeProxyReplacement: "true"
 bpf:
+  autoMount:
+    enabled: false
   masquerade: true
   hostLegacyRouting: false
 

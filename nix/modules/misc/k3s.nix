@@ -18,8 +18,8 @@ let
   svcCIDR = "10.251.0.0/16";
   dnsIP = "10.251.0.10";
 
-  images = with pkgs.dockerTools; [
-    (streamLayeredImage rec {
+  images = with pkgs.dockerTools; {
+    "dhm-ctf.de/nixos-built/longhorn-manager:v1.6.2" = buildLayeredImage rec {
       name = "dhm-ctf.de/nixos-built/longhorn-manager";
       tag = "v1.6.2";
 
@@ -37,8 +37,9 @@ let
         ];
         Cmd = [ "launch-manager" ];
       };
-    })
-    (streamLayeredImage rec {
+    };
+
+    "dhm-ctf.de/nixos-built/longhorn-instance-manager:v1.6.2" = buildLayeredImage rec {
       name = "dhm-ctf.de/nixos-built/longhorn-instance-manager";
       tag = "v1.6.2";
 
@@ -60,8 +61,9 @@ let
           "--"
         ];
       };
-    })
-    (streamLayeredImage rec {
+    };
+
+    "dhm-ctf.de/nixos-built/github-actions-runner:latest" = buildLayeredImage rec {
       name = "dhm-ctf.de/nixos-built/github-actions-runner";
       tag = "latest";
 
@@ -156,8 +158,8 @@ let
         User = "nixbld";
         WorkingDir = "/build/.github-runner";
       };
-    })
-  ];
+    };
+  };
 in
 {
   config = mkIf cfg.enable {
@@ -224,6 +226,7 @@ in
           "--node-label=node.longhorn.io/create-default-disk=true"
 
           "--kubelet-arg=node-status-update-frequency=4s"
+          "--kubelet-arg=--container-runtime-endpoint=/var/run/crio/crio.sock"
         ]
         ++ optionals (cfg.role == "server") [
           "--disable-helm-controller"
@@ -253,23 +256,41 @@ in
       };
     };
 
-    systemd.services.k3s-image-import = mkIf (cfg.role == "server" && cfg.clusterInit) {
-      path = with pkgs; [ k3s ];
+    systemd.services.crio-image-import = mkIf (cfg.role == "server" && cfg.clusterInit) {
+      path = with pkgs; [
+        cri-tools
+        skopeo
+      ];
 
       script = ''
-        echo "Waiting for k3s to become available..."
+        echo "Waiting for cri-o to become available..."
 
-        while ! k3s kubectl version &>/dev/null; do
+        while ! crictl info &>/dev/null; do
           sleep 1
         done
 
-        echo "k3s available."
+        echo "cri-o available."
 
-        ${concatStringsSep "\n" (map (v: "${v} | ctr -n k8s.io image import -") images)}
+        ${concatStringsSep "\n" (
+          mapAttrsToList (n: v: "skopeo copy docker-archive:${v} containers-storage:${n}") images
+        )}
       '';
 
       requires = [ "k3s.service" ];
       wantedBy = [ "multi-user.target" ];
+    };
+
+    virtualisation.cri-o = {
+      enable = true;
+
+      extraPackages = with pkgs; [
+        crun
+        runc
+      ];
+
+      settings = {
+        crio.network.plugin_dirs = [ "/opt/cni/bin" ];
+      };
     };
   };
 }

@@ -1,4 +1,5 @@
 { config, self, ... }:
+
 {
   sops.secrets.clusterToken = {
     sopsFile = "${self}/secrets/cluster.sops.yaml";
@@ -137,8 +138,12 @@
     ln -sf /etc/k3s/containerd/config.toml.tmpl /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
   '';
 
-  systemd.services.k3s.serviceConfig.StateDirectory = [
-    "storage/kubelet:kubelet"
-    "storage/rancher:rancher"
-  ];
+  systemd.services = {
+    crio.serviceConfig.StateDirectory = [ "storage/containers:containers" ];
+
+    k3s.serviceConfig.StateDirectory = [
+      "storage/kubelet:kubelet"
+      "storage/rancher:rancher"
+    ];
+  };
 }
