@@ -98,6 +98,7 @@ let
             experimental-features = nix-command flakes
             post-build-hook = ${post-build-hook}/bin/post-build-hook
             extra-substituters = file:///mnt/ci-nix/
+            trusted-substituters = file:///mnt/ci-nix/
           '')
 
           (fakeNss.override {
