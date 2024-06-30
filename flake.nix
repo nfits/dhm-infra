@@ -31,6 +31,25 @@
           inherit system;
 
           config = import ./nix/nixpkgs-config.nix inputs;
+
+          overlays = [
+            (final: prev: {
+              crun = prev.crun.overrideAttrs (old: {
+                configureFlags = [ "--with-libkrun" ];
+
+                buildInputs = old.buildInputs ++ [ prev.libkrun ];
+                nativeBuildInputs = old.nativeBuildInputs ++ [ prev.patchelf ];
+
+                postInstall = ''
+                  ln -s crun $out/bin/krun
+                '';
+
+                postFixup = ''
+                  patchelf --add-rpath ${nixpkgs.lib.makeLibraryPath [ prev.libkrun ]} $out/bin/crun
+                '';
+              });
+            })
+          ];
         };
 
         callDir =
