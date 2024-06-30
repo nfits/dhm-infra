@@ -48,6 +48,7 @@
                   patchelf --add-rpath ${nixpkgs.lib.makeLibraryPath [ prev.libkrun ]} $out/bin/crun
                 '';
               });
+              crun-vm = final.callPackage ./nix/packages/crun-vm.nix { };
             })
           ];
         };

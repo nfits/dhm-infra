@@ -284,13 +284,19 @@ in
     virtualisation.cri-o = {
       enable = true;
 
-      extraPackages = with pkgs; [
-        crun
-        runc
-      ];
+      extraPackages = with pkgs; [ runc ];
 
       settings = {
-        crio.network.plugin_dirs = [ "/opt/cni/bin" ];
+        crio = {
+          network.plugin_dirs = [ "/opt/cni/bin" ];
+          runtime = {
+            cdi_spec_dirs = [
+              "/etc/cdi"
+              "/var/run/cdi"
+            ];
+            runtimes.crun-vm.runtime_path = "${getExe pkgs.crun-vm}";
+          };
+        };
       };
     };
   };
