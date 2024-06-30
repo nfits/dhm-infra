@@ -294,7 +294,8 @@ in
               "/etc/cdi"
               "/var/run/cdi"
             ];
-            runtimes.crun-vm.runtime_path = "${getExe pkgs.crun-vm}";
+            #runtimes.crun-vm.runtime_path = "${getExe pkgs.crun-vm}";
+            runtimes.krun.runtime_path = "${getExe' pkgs.crun "krun"}";
           };
         };
       };

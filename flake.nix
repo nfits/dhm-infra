@@ -24,10 +24,10 @@
       nixpkgs,
       ...
     }@inputs:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs {
+    let
+      pkgsFor =
+        system:
+        import nixpkgs {
           inherit system;
 
           config = import ./nix/nixpkgs-config.nix inputs;
@@ -40,18 +40,24 @@
                 buildInputs = old.buildInputs ++ [ prev.libkrun ];
                 nativeBuildInputs = old.nativeBuildInputs ++ [ prev.patchelf ];
 
+                # needs to be a copy /shrug
                 postInstall = ''
-                  ln -s crun $out/bin/krun
+                  cp $out/bin/crun $out/bin/krun
                 '';
 
                 postFixup = ''
-                  patchelf --add-rpath ${nixpkgs.lib.makeLibraryPath [ prev.libkrun ]} $out/bin/crun
+                  patchelf --add-rpath ${nixpkgs.lib.makeLibraryPath [ prev.libkrun ]} $out/bin/krun
                 '';
               });
-              crun-vm = final.callPackage ./nix/packages/crun-vm.nix { };
             })
           ];
         };
+    in
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+
+        pkgs = pkgsFor system;
 
         callDir =
           with builtins;
@@ -82,11 +88,7 @@
         mapAttrs (
           n: _:
           nixpkgs.lib.nixosSystem {
-            pkgs = import nixpkgs {
-              system = "x86_64-linux";
-
-              config = import ./nix/nixpkgs-config.nix inputs;
-            };
+            pkgs = pkgsFor "x86_64-linux";
 
             specialArgs = {
               inherit inputs self;

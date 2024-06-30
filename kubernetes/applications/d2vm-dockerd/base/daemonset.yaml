@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: d2vm-dockerd-daemonset
+spec:
+  selector:
+    matchLabels:
+      name: d2vm-dockerd
+  template:
+    metadata:
+      labels:
+        name: d2vm-dockerd
+    spec:
+      containers:
+        - name: d2vm-dockerd
+          image: docker:27.0.2-dind
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 2378
+            protocol: TCP
+      runtimeClassName: krun
