@@ -18,6 +18,8 @@ auth:
       - "217696462371422208" # Lukas (RedRocket)
       - "222796095745556480" # Apfelsaft (Betatester (Tobi (NFITS)))
       - "729418872045961359" # Ruben (RedRocket)
+      - "653830824697004063" # Fabian (Betatester (Tobi (NFITS)))
+      - "653368699000193095" # Smartsmurf (Betatester (Tobi (NFITS)))
 
 api:
   image:

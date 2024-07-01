@@ -91,6 +91,16 @@
           publicKey = "5Vbd/lkhyKwh6QWavAQ1R142fiL8PMJvLoHUa15p/Dk=";
           allowedIPs = [ "10.247.0.16/32" ];
         }
+        # Fabian (Betatester (Tobi (NFITS)))
+        {
+          publicKey = "P/2FWf55JOUpHX7dv1UBFKs8OTEU+GdFGc3WH1ckZig=";
+          allowedIPs = [ "10.247.0.17/32" ];
+        }
+        # Smartsmurf (Betatester (Tobi (NFITS)))
+        {
+          publicKey = "cyUEYHQpjVclprIeGsERcK9KP8++EgxWHUaYVHWw8G8=";
+          allowedIPs = [ "10.247.0.18/32" ];
+        }
       ];
     };
 
