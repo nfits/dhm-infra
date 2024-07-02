@@ -44,7 +44,7 @@ broker:
 
   service:
     annotations:
-      external-dns.alpha.kubernetes.io/hostname: "*.challenges.dhm-ctf.de"
+      external-dns.alpha.kubernetes.io/hostname: "challenges.dhm-ctf.de,*.challenges.dhm-ctf.de"
 
   config:
     tls:
