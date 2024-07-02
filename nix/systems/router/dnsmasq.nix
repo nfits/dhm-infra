@@ -19,6 +19,7 @@ let
           (mapAttrsToList (
             slug: map (ip: "${ip} ${slug}.${cfg.dns.subdomain}.${config.dhm.networking.tld}")
           ) cfg.dns.extraHosts)
+          "${cfg.ipv4.routerAddress} ${config.networking.hostName}.${cfg.dns.subdomain}.${config.dhm.networking.tld}"
         ]) config.dhm.networking.vlans
       )
     )

@@ -1,5 +1,6 @@
-_:
+{ lib, ... }:
 
+with lib;
 let
   vlanOffset = 2000;
 
@@ -23,101 +24,130 @@ in
   dhm.networking = {
     tld = "dhm-ctf.de";
 
-    vlans = {
-      cluster = {
-        dhcp = (dhcpDefault 2) // {
-          staticLeases = {
-            node1 = {
-              ip = subnet24Ip 2 11;
-              mac = "bc:24:11:40:47:ec";
+    vlans =
+      {
+        cluster = rec {
+          dhcp = (dhcpDefault 2) // {
+            staticLeases = {
+              node1 = {
+                ip = subnet24Ip 2 11;
+                mac = "bc:24:11:40:47:ec";
+              };
             };
           };
+
+          dns.extraHosts = {
+            api = [ dhcp.staticLeases.node1.ip ];
+          };
+
+          ipv4 = ipv4Default 2 // {
+            routedSubnets = [ "10.248.3.0/24" ];
+          };
+          vlanId = vlanOffset + 2;
         };
 
-        dns.extraHosts = {
-          api = [
-            (subnet24Ip 2 11) # Node 1
-          ];
-        };
-
-        ipv4 = ipv4Default 2 // {
-          routedSubnets = [ "10.248.3.0/24" ];
-        };
-        vlanId = vlanOffset + 2;
-      };
-
-      # services = {
-      #   dns.subdomain = "svc";
-      #
-      #   ipv4 = ipv4Default 3;
-      #   vlanId = vlanOffset + 3;
-      # };
-
-      management = {
-        dhcp = (dhcpDefault 4) // {
-          staticLeases = {
-            node1 = {
-              ip = subnet24Ip 4 11;
-              mac = "42:66:b5:cc:90:11";
-            };
-            node2 = {
-              ip = subnet24Ip 4 12;
-              mac = "52:34:f0:6e:06:02";
+        management = {
+          dhcp = (dhcpDefault 4) // {
+            staticLeases = {
+              node1 = {
+                ip = subnet24Ip 4 11;
+                mac = "42:66:b5:cc:90:11";
+              };
+              node2 = {
+                ip = subnet24Ip 4 12;
+                mac = "52:34:f0:6e:06:02";
+              };
+              node3 = {
+                ip = subnet24Ip 4 13;
+                mac = "3e:14:ac:bc:43:61";
+              };
+              node4 = {
+                ip = subnet24Ip 4 14;
+                mac = "06:0f:c7:53:17:be";
+              };
             };
           };
+
+          ipv4 = ipv4Default 4;
+          vlanId = vlanOffset + 4;
         };
 
-        ipv4 = ipv4Default 4;
-        vlanId = vlanOffset + 4;
-      };
+        organisers = {
+          dns.subdomain = "orga";
 
-      organisers = {
-        dns.subdomain = "orga";
-
-        dhcp = (dhcpDefault 5) // {
-          staticLeases = {
-            vpn-gateway = {
-              ip = subnet24Ip 5 2;
-              mac = "bc:24:11:1a:bf:7a";
+          dhcp = (dhcpDefault 5) // {
+            staticLeases = {
+              vpn-gateway = {
+                ip = subnet24Ip 5 2;
+                mac = "bc:24:11:1a:bf:7a";
+              };
             };
           };
+
+          ipv4 = ipv4Default 5;
+          vlanId = vlanOffset + 5;
         };
 
-        ipv4 = ipv4Default 5;
-        vlanId = vlanOffset + 5;
-      };
+        uplink = {
+          ipv4 = {
+            prefix = "10.248.6.0";
+            prefixLength = 24;
 
-      uplink = {
-        ipv4 = {
-          prefix = "10.248.6.0";
-          prefixLength = 24;
+            routerAddress = "10.248.6.2";
+            gateway = "10.248.6.1";
+          };
 
-          routerAddress = "10.248.6.2";
-          gateway = "10.248.6.1";
+          vlanId = vlanOffset + 6;
         };
 
-        vlanId = vlanOffset + 6;
-      };
+        services = {
+          dns.subdomain = "svc";
 
-      guests = {
-        dns.subdomain = "guest";
+          dhcp = (dhcpDefault 7) // {
+            staticLeases = {
+              authentik = {
+                ip = subnet24Ip 7 2;
+                mac = "bc:24:11:f7:fc:03";
+              };
+            };
+          };
 
-        dhcp = {
-          enable = true;
-
-          firstIP = "10.249.0.50";
-          lastIP = "10.249.255.254";
+          ipv4 = ipv4Default 7;
+          vlanId = vlanOffset + 7;
         };
 
-        ipv4 = {
-          prefix = "10.249.0.0";
-          prefixLength = 16;
+        guests = {
+          dns.subdomain = "guest";
 
-          routerAddress = "10.249.0.1";
+          dhcp = {
+            enable = true;
+
+            firstIP = "10.249.0.50";
+            lastIP = "10.249.255.254";
+          };
+
+          ipv4 = {
+            prefix = "10.249.0.0";
+            prefixLength = 16;
+
+            routerAddress = "10.249.0.1";
+          };
+
+          vlanId = vlanOffset + 256;
         };
+      }
+      // (listToAttrs (
+        map (id: {
+          name = "team-${toString id}";
+          value = {
+            dns.subdomain = "team-${toString id}";
 
-        vlanId = vlanOffset + 256;
-      };
-    };
+            dhcp = dhcpDefault (10 + id);
+
+            ipv4 = ipv4Default (10 + id);
+            vlanId = vlanOffset + (10 + id);
+          };
+        }) (range 1 14)
+      ));
   };
 }

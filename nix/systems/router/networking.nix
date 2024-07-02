@@ -51,7 +51,9 @@ in
       filterForward = true;
 
       extraForwardRules = ''
+        iifname { uplink } reject comment "uplink may not access the internal network"
         iifname { organisers } accept comment "organisers have full access"
+        iifname != { guests } ip daddr 10.248.3.0/24 accept comment "everyone but guests may access the k8s cluster"
         iifname != { guests } oifname { services } accept comment "everyone but guests have access to services"
       '';
     };
