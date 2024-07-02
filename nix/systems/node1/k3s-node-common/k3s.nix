@@ -12,11 +12,6 @@
       device = "/dev/disk/by-label/Data";
       fsType = "ext4";
     };
-
-    "/var/lib/longhorn" = {
-      device = "/dev/disk/by-label/Longhorn";
-      fsType = "ext4";
-    };
   };
 
   services = {
@@ -34,6 +29,7 @@
     k3s.serviceConfig.StateDirectory = [
       "storage/kubelet:kubelet"
       "storage/rancher:rancher"
+      "storage/longhorn:longhorn"
     ];
   };
 }
