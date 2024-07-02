@@ -97,7 +97,7 @@ let
           (writeTextDir "/etc/nix/nix.conf" ''
             experimental-features = nix-command flakes
             post-build-hook = ${post-build-hook}/bin/post-build-hook
-            extra-substituters = file:///mnt/ci-nix/
+            extra-substituters = file:///mnt/ci-nix/?trusted=1
             trusted-substituters = file:///mnt/ci-nix/
           '')
 
