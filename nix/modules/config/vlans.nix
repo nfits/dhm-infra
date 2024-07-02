@@ -103,14 +103,7 @@ in
         services = {
           dns.subdomain = "svc";
 
-          dhcp = (dhcpDefault 7) // {
-            staticLeases = {
-              authentik = {
-                ip = subnet24Ip 7 2;
-                mac = "bc:24:11:f7:fc:03";
-              };
-            };
-          };
+          dhcp = dhcpDefault 7;
 
           ipv4 = ipv4Default 7;
           vlanId = vlanOffset + 7;

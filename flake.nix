@@ -37,8 +37,8 @@
               crun = prev.crun.overrideAttrs (old: {
                 configureFlags = [ "--with-libkrun" ];
 
-                buildInputs = old.buildInputs ++ [ prev.libkrun ];
-                nativeBuildInputs = old.nativeBuildInputs ++ [ prev.patchelf ];
+                buildInputs = old.buildInputs ++ [ final.libkrun ];
+                nativeBuildInputs = old.nativeBuildInputs ++ [ final.patchelf ];
 
                 # needs to be a copy /shrug
                 postInstall = ''
@@ -46,7 +46,7 @@
                 '';
 
                 postFixup = ''
-                  patchelf --add-rpath ${nixpkgs.lib.makeLibraryPath [ prev.libkrun ]} $out/bin/krun
+                  patchelf --add-rpath ${nixpkgs.lib.makeLibraryPath [ final.libkrun ]} $out/bin/krun
                 '';
               });
             })
@@ -56,7 +56,6 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-
         pkgs = pkgsFor system;
 
         callDir =
