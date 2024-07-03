@@ -1,18 +1,14 @@
 redis-ha:
-  # FIXME: Enable
-  enabled: false
+  enabled: true
 
 controller:
-  # FIXME: Increase
-  replicas: 1
+  replicas: 3
 
 server:
-  # FIXME: Increase
-  replicas: 1
+  replicas: 3
 
 repoServer:
-  # FIXME: Increase
-  replicas: 1
+  replicas: 3
   env:
     - name: HELM_PLUGINS
       value: /custom-tools/helm-plugins/
@@ -93,8 +89,7 @@ repoServer:
           name: custom-tools
 
 applicationSet:
-  # FIXME: Increase
-  replicas: 1
+  replicas: 3
 
 configs:
   cm:
@@ -111,8 +106,7 @@ global:
   domain: argocd.dhm-ctf.de
 
   affinity:
-    # FIXME: Change
-    podAntiAffinity: soft
+    podAntiAffinity: hard
 
 notifications:
   templates:

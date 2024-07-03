@@ -1,6 +1,5 @@
 nginxGateway:
-  # FIXME: Increase
-  replicaCount: 1
+  replicaCount: 3
 
 service:
   annotations:
