@@ -33,11 +33,33 @@ in
                 ip = subnet24Ip 2 11;
                 mac = "bc:24:11:40:47:ec";
               };
+              node2 = {
+                ip = subnet24Ip 2 12;
+                mac = "bc:24:11:1b:c0:de";
+              };
+              node3 = {
+                ip = subnet24Ip 2 13;
+                mac = "bc:24:11:8e:e4:c4";
+              };
+              node4 = {
+                ip = subnet24Ip 2 14;
+                mac = "bc:24:11:b3:6c:31";
+              };
+              node5 = {
+                ip = subnet24Ip 2 15;
+                mac = "bc:24:11:3f:ac:75";
+              };
             };
           };
 
           dns.extraHosts = {
-            api = [ dhcp.staticLeases.node1.ip ];
+            api = with dhcp.staticLeases; [
+              node1.ip
+              node2.ip
+              node3.ip
+              node4.ip
+              node5.ip
+            ];
           };
 
           ipv4 = ipv4Default 2 // {

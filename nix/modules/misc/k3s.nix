@@ -257,7 +257,7 @@ in
       };
     };
 
-    systemd.services.crio-image-import = mkIf (cfg.role == "server" && cfg.clusterInit) {
+    systemd.services.crio-image-import = mkIf config.virtualisation.cri-o.enable {
       path = with pkgs; [
         cri-tools
         skopeo
@@ -277,7 +277,7 @@ in
         )}
       '';
 
-      requires = [ "k3s.service" ];
+      requires = [ "crio.service" ];
       wantedBy = [ "multi-user.target" ];
     };
 

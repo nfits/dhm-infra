@@ -15,6 +15,9 @@ in
 
   config = mkIf cfg.isProxmoxVM {
     boot = {
+      # Use tmpfs for /tmp, better for builds
+      tmp.useTmpfs = mkDefault true;
+
       initrd.availableKernelModules = [
         "ata_piix"
         "uhci_hcd"

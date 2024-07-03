@@ -1,11 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  self,
-  systemConfigs,
-  ...
-}:
+{ config, lib, ... }:
 
 with lib;
 {
@@ -13,7 +6,7 @@ with lib;
     k3s = {
       # Override the default from node1
       clusterInit = mkForce false;
-      serverAddr = "https://${systemConfigs.node1.networking.fqdn}:6443";
+      serverAddr = "https://api.${config.networking.domain}:6443";
     };
   };
 }

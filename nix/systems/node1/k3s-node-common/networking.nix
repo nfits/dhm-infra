@@ -28,7 +28,8 @@ in
       "30-uplink" = {
         inherit networkConfig;
 
-        matchConfig.PermanentMACAddress = cfg.vlans.cluster.dhcp.staticLeases.node1.mac;
+        matchConfig.PermanentMACAddress =
+          cfg.vlans.cluster.dhcp.staticLeases.${config.networking.hostName}.mac;
         linkConfig.RequiredForOnline = "carrier";
 
         vlan = [ "cluster" ];
