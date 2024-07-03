@@ -321,7 +321,7 @@ in
 
   services.freeradius = {
     enable = true;
-    debug = true;
+    debug = false;
 
     inherit configDir;
   };

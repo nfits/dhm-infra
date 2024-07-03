@@ -51,11 +51,11 @@ in
             staticLeases = {
               node1 = {
                 ip = subnet24Ip 4 11;
-                mac = "42:66:b5:cc:90:11";
+                mac = "5a:99:bb:a2:16:82";
               };
               node2 = {
                 ip = subnet24Ip 4 12;
-                mac = "52:34:f0:6e:06:02";
+                mac = "b2:f1:59:bb:28:eb";
               };
               node3 = {
                 ip = subnet24Ip 4 13;
@@ -64,6 +64,10 @@ in
               node4 = {
                 ip = subnet24Ip 4 14;
                 mac = "06:0f:c7:53:17:be";
+              };
+              node5 = {
+                ip = subnet24Ip 4 15;
+                mac = "42:a3:3f:f4:1c:86";
               };
             };
           };
