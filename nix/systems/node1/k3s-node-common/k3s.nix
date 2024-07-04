@@ -6,14 +6,6 @@
     restartUnits = [ "k3s.service" ];
   };
 
-  # We have a separate data drives
-  fileSystems = {
-    "/var/lib/storage" = {
-      device = "/dev/disk/by-label/Data";
-      fsType = "ext4";
-    };
-  };
-
   services = {
     k3s = {
       enable = true;
