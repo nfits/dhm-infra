@@ -30,13 +30,13 @@ api:
 
   resources: { }
 
-  affinity: { }
   podLabels: { }
   tolerations: [ ]
   nodeSelector: { }
   podAnnotations: { }
   securityContext: { }
   podSecurityContext: { }
+  podAntiAffinityPreset: null
 
 broker:
   replicaCount: 1
@@ -61,13 +61,13 @@ broker:
 
   resources: { }
 
-  affinity: { }
   podLabels: { }
   tolerations: [ ]
   nodeSelector: { }
   podAnnotations: { }
   securityContext: { }
   podSecurityContext: { }
+  podAntiAffinityPreset: null
 
 frontend:
   replicaCount: 1
@@ -92,13 +92,13 @@ frontend:
 
   resources: { }
 
-  affinity: { }
   podLabels: { }
   tolerations: [ ]
   nodeSelector: { }
   podAnnotations: { }
   securityContext: { }
   podSecurityContext: { }
+  podAntiAffinityPreset: null
 
 staticFiles:
   replicaCount: 1
@@ -126,13 +126,13 @@ staticFiles:
       path: /readyz
       port: http
 
-  affinity: { }
   podLabels: { }
   tolerations: [ ]
   nodeSelector: { }
   podAnnotations: { }
   securityContext: { }
   podSecurityContext: { }
+  podAntiAffinityPreset: null
 
   resources: { }
 
