@@ -25,6 +25,7 @@ containerMode:
   ## the following is required when containerMode.type=kubernetes
   kubernetesModeWorkVolumeClaim:
     accessModes: [ "ReadWriteOnce" ]
+    storageClassName: "longhorn-local-only"
     resources:
       requests:
         storage: 10Gi

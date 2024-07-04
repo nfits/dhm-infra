@@ -19,6 +19,9 @@ spec:
     - repoURL: https://github.com/nfits/dhm-infra.git
       targetRevision: main
       ref: values
+    - repoURL: https://github.com/nfits/dhm-infra.git
+      targetRevision: main
+      path: kubernetes/applications/longhorn/extra
   syncPolicy:
     automated:
       prune: true
