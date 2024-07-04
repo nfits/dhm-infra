@@ -9,7 +9,7 @@ volumeBindingMode: Immediate
 parameters:
   fsType: "ext4"
   migratable: "true"
-  dataLocality: "strict-local"
+  dataLocality: "best-effort"
   numberOfReplicas: "1"
   staleReplicaTimeout: "2880"
   replicaAutoBalance: "ignored"
