@@ -130,7 +130,6 @@ template:
         securityContext:
           runAsUser: 1000
           runAsGroup: 1000
-          fsGroup: 1000
         image: docker:27.0.2-dind-rootless
         imagePullPolicy: IfNotPresent
         env:
