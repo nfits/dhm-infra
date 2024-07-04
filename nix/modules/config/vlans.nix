@@ -107,6 +107,10 @@ in
                 ip = subnet24Ip 5 2;
                 mac = "bc:24:11:1a:bf:7a";
               };
+              schreihals = {
+                ip = subnet24Ip 5 3;
+                mac = "7c:d3:0a:31:87:62";
+              };
             };
           };
 
