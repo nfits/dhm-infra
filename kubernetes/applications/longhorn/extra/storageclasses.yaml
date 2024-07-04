@@ -8,6 +8,7 @@ reclaimPolicy: Delete
 volumeBindingMode: Immediate
 parameters:
   fsType: "ext4"
+  migratable: "true"
   dataLocality: "strict-local"
   numberOfReplicas: "1"
   staleReplicaTimeout: "2880"
