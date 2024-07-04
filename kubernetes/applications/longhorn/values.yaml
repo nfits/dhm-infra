@@ -11,6 +11,7 @@ defaultSettings:
   defaultDataPath: /var/lib/longhorn/
   replicaAutoBalance: best-effort
   defaultDataLocality: best-effort
+  storageOverProvisioningPercentage: 200
   allowCollectingLonghornUsageMetrics: false
   storageReservedPercentageForDefaultDisk: 10
   concurrentAutomaticEngineUpgradePerNodeLimit: 1
