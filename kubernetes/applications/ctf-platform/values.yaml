@@ -55,7 +55,7 @@ broker:
 frontend:
   image:
     repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/web
-    tag: cscg
+    tag: dhm
 
   config:
     url: "https://play.dhm-ctf.de"
