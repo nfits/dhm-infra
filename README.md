@@ -20,18 +20,17 @@ DHM Infrastructure
 The DHM network is `10.248.0.0/14`.
 DNS Zones are extended by `dhm-ctf.de`.
 
-Due to constraints al VLANs are offset by +2000.
-
 | Zone             | VLAN                   | IP Ranges                        | DNS Zone     |
 |------------------|------------------------|----------------------------------|--------------|
-| Cluster Nodes    | 2                      | 10.248.2.0/24                    | cluster.     |
+| Cluster Nodes    | 2002                   | 10.248.2.0/24                    | cluster.     |
 | Cluster Services | - (Routed via Cluster) | 10.248.3.0/24                    |              |
-| Management       | 4                      | 10.248.4.0/24                    | management.  |
-| Organisers       | 5                      | 10.248.5.0/24                    | orga.        |
-| Uplink           | 6                      | 10.248.6.0/24 (If needed at all) | uplink.      |
-| Services         | 7                      | 10.248.7.0/24                    | svc.         |
-| Team 1-14        | 11-24                  | 10.248.<team-id>.0/24            | team-(1-14). |
-| Guests           | 256                    | 10.249.0.0/16                    | guest.       |
+| Management       | 2004                   | 10.248.4.0/24                    | management.  |
+| Organisers       | 2005                   | 10.248.5.0/24                    | orga.        |
+| Uplink           | 2006                   | 10.248.6.0/24 (If needed at all) | uplink.      |
+| Services         | 2007                   | 10.248.7.0/24                    | svc.         |
+| AP Management    | 891                    | 10.248.8.0/24                    | wlan.        |
+| Team 1-14        | 2011-24                | 10.248.<team-id>.0/24            | team-(1-14). |
+| Guests           | 4000                   | 10.249.0.0/16                    | guest.       |
 | Cluster Pod      | - (Routed via Cluster) | 10.250.0.0/16 (Pod IP Range)     |              |
 | Cluster Svc      | - (Routed via Cluster) | 10.251.0.0/16 (Service IP Range) |              |
 

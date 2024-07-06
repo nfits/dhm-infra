@@ -156,7 +156,16 @@ in
             routerAddress = "10.249.0.1";
           };
 
-          vlanId = vlanOffset + 256;
+          vlanId = vlanOffset + 2000;
+        };
+
+        wlan = {
+          dns.subdomain = "wlan";
+
+          dhcp = dhcpDefault 8;
+
+          ipv4 = ipv4Default 8;
+          vlanId = 891;
         };
       }
       // (listToAttrs (
