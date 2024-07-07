@@ -51,8 +51,9 @@ containerMode:
 ## For reference: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
 template:
   metadata:
-    annotations:
+    labels:
       app: ci-builder
+    annotations:
       container.apparmor.security.beta.kubernetes.io/buildkit: unconfined
       container.apparmor.security.beta.kubernetes.io/dockerd: unconfined
   spec:
