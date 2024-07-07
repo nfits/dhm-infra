@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: ci-nix-cache
 spec:
+  storageClassName: longhorn
   accessModes:
     - ReadWriteMany
   resources:
