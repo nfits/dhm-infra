@@ -53,6 +53,11 @@ let
       secret = testing
     }
 
+    client wifiAP {
+      ipaddr = 10.248.8.0/24
+      $INCLUDE ${config.sops.secrets.radiusClientSecret.path}
+    }
+
     thread pool {
       start_servers = 2
       max_servers = 4
@@ -103,7 +108,7 @@ let
           cipher_list = "DEFAULT"
 
           tls_min_version = "1.2"
-          tls_max_version = "1.3"
+          tls_max_version = "1.2"
         }
 
         tls {
@@ -175,6 +180,23 @@ let
         }
 
         eap
+      }
+
+      post-auth {
+        update reply {
+          User-Name !* ANY
+          Message-Authenticator !* ANY
+          EAP-Message !* ANY
+          Proxy-State !* ANY
+          MS-MPPE-Encryption-Types !* ANY
+          MS-MPPE-Encryption-Policy !* ANY
+          MS-MPPE-Send-Key !* ANY
+          MS-MPPE-Recv-Key !* ANY
+        }
+
+        Post-Auth-Type REJECT {
+          attr_filter.access_reject
+        }
       }
     }
 
@@ -298,6 +320,13 @@ in
       owner = "radius";
     };
 
+    radiusClientSecret = {
+      sopsFile = "${self}/secrets/credentials.sops.yaml";
+
+      mode = "0400";
+      owner = "radius";
+    };
+
     cloudflareCredentials.sopsFile = "${self}/secrets/misc.sops.yaml";
   };
 
@@ -325,6 +354,8 @@ in
 
     inherit configDir;
   };
+
+  networking.firewall.interfaces.wlan.allowedTCPPorts = [ port ];
 
   systemd.services.freeradius.serviceConfig.StateDirectory = [ "radius" ];
 }

@@ -49,6 +49,7 @@ in
 
     firewall = {
       filterForward = true;
+      trustedInterfaces = [ "organisers" ];
 
       extraForwardRules = ''
         iifname { uplink } reject comment "uplink may not access the internal network"
