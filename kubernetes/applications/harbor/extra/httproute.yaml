@@ -30,4 +30,5 @@ spec:
     kind: HTTPRoute
     name: harbor
   body:
-    maxSize: "10g"
+    # Disable
+    maxSize: "0"
