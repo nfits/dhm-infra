@@ -9,4 +9,4 @@ persistence:
   enabled: true
   persistentVolumeClaim:
     registry:
-      size: 50Gi
+      size: 100Gi
