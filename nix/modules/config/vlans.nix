@@ -31,7 +31,7 @@ let
     team-8 = "fc:e8:c0:7e:95:cb";
     team-9 = "fc:e8:c0:7e:2a:bf";
     team-10 = "fc:e8:c0:7e:79:33";
-    team-11 = "fc:e8:c0:7e:95:a3";
+    team-11 = "fc:e8:c0:7d:61:6b";
     team-12 = "fc:e8:c0:7e:95:a3";
     team-13 = "fc:e8:c0:7d:3c:33";
     team-14 = "fc:e8:c0:7d:eb:db";
