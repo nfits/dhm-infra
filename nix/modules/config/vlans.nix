@@ -120,14 +120,14 @@ in
 
         uplink = {
           ipv4 = {
-            prefix = "10.248.6.0";
-            prefixLength = 24;
+            prefix = "31.172.98.0/23";
+            prefixLength = 23;
 
-            routerAddress = "10.248.6.2";
-            gateway = "10.248.6.1";
+            routerAddress = "31.172.98.42";
+            gateway = "31.172.99.254";
           };
 
-          vlanId = vlanOffset + 6;
+          vlanId = 200;
         };
 
         services = {
