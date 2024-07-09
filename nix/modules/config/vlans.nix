@@ -120,7 +120,7 @@ in
 
         uplink = {
           ipv4 = {
-            prefix = "31.172.98.0/23";
+            prefix = "31.172.98.0";
             prefixLength = 23;
 
             routerAddress = "31.172.98.42";
@@ -166,6 +166,24 @@ in
 
           ipv4 = ipv4Default 8;
           vlanId = 891;
+        };
+
+        nviso-chal = {
+          dns.subdomain = "nviso-challenge";
+
+          dhcp = dhcpDefault 100;
+
+          ipv4 = ipv4Default 100;
+          vlanId = vlanOffset + 1000;
+        };
+
+        nviso-team = {
+          dns.subdomain = "nviso-participant";
+
+          dhcp = dhcpDefault 101;
+
+          ipv4 = ipv4Default 101;
+          vlanId = vlanOffset + 1001;
         };
       }
       // (listToAttrs (
