@@ -42,6 +42,21 @@ in
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
   networking = {
+    nftables = {
+      flushRuleset = true;
+
+      ruleset = ''
+        table inet mss-clamping {
+          chain clamp {
+            type filter hook forward priority mangle; policy accept;
+
+            oifname { uplink } tcp flags syn tcp option maxseg size set rt mtu
+            iifname { uplink } tcp flags syn tcp option maxseg size set rt mtu
+          }
+        }
+      '';
+    };
+
     nat = {
       enable = true;
 
