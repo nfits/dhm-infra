@@ -355,7 +355,7 @@ in
     inherit configDir;
   };
 
-  networking.firewall.interfaces.wlan.allowedTCPPorts = [ port ];
+  networking.firewall.interfaces.wlan.allowedUDPPorts = [ port ];
 
   systemd.services.freeradius.serviceConfig.StateDirectory = [ "radius" ];
 }

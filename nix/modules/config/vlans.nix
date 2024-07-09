@@ -19,6 +19,26 @@ let
     firstIP = subnet24Ip subnet 50;
     lastIP = subnet24Ip subnet 254;
   };
+
+  lightMacs = {
+    team-1 = "fc:e8:c0:7e:51:7b";
+    team-2 = "fc:e8:c0:7e:39:17";
+    team-3 = "fc:e8:c0:7e:01:cb";
+    team-4 = "fc:e8:c0:7e:80:f7";
+    team-5 = "fc:e8:c0:7d:1f:9f";
+    team-6 = "fc:e8:c0:7e:a4:ef";
+    team-7 = "fc:e8:c0:7d:26:57";
+    team-8 = "fc:e8:c0:7e:95:cb";
+    team-9 = "fc:e8:c0:7e:2a:bf";
+    team-10 = "fc:e8:c0:7e:79:33";
+    team-11 = "fc:e8:c0:7e:95:a3";
+    team-12 = "fc:e8:c0:7e:95:a3";
+    team-13 = "fc:e8:c0:7d:3c:33";
+    team-14 = "fc:e8:c0:7d:eb:db";
+
+    orga-1 = "";
+    orga-2 = "";
+  };
 in
 {
   dhm.networking = {
@@ -192,7 +212,14 @@ in
           value = {
             dns.subdomain = "team-${toString id}";
 
-            dhcp = dhcpDefault (10 + id);
+            dhcp = dhcpDefault (10 + id) // {
+              staticLeases = {
+                lichtstab = {
+                  ip = subnet24Ip (10 + id) 2;
+                  mac = lightMacs."team-${toString id}";
+                };
+              };
+            };
 
             ipv4 = ipv4Default (10 + id);
             vlanId = vlanOffset + (10 + id);
