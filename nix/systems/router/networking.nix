@@ -35,6 +35,8 @@ let
   };
 
   dhmVlans = mapAttrs vlanConfig config.dhm.networking.vlans;
+
+  vpnIP = config.dhm.networking.vlans.organisers.dhcp.staticLeases.vpn-gateway.ip;
 in
 {
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
@@ -45,6 +47,14 @@ in
 
       internalIPs = [ "10.248.0.0/14" ];
       externalInterface = "uplink";
+
+      forwardPorts = [
+        {
+          destination = "${vpnIP}:51820";
+          proto = "udp";
+          sourcePort = 51820;
+        }
+      ];
     };
 
     firewall = {
@@ -52,8 +62,8 @@ in
       trustedInterfaces = [ "organisers" ];
 
       extraForwardRules = ''
-        iifname { uplink } reject comment "uplink may not access the internal network"
         iifname { organisers } accept comment "organisers have full access"
+        iifname { uplink } ip daddr { ${vpnIP} } accept comment "vpn gateway"
         iifname != { guests } ip daddr 10.248.3.0/24 accept comment "everyone but guests may access the k8s cluster"
         iifname != { guests } oifname { services } accept comment "everyone but guests have access to services"
       '';
