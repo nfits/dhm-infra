@@ -55,6 +55,7 @@ broker:
       secretName: broker-tls
 
 frontend:
+  replicaCount: 3
   image:
     repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/web
     tag: dhm
