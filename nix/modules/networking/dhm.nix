@@ -72,12 +72,25 @@ with lib;
                 };
 
                 routerAddress = mkOption { type = str; };
+
+                exitIPAddress = mkOption {
+                  type = nullOr (submodule {
+                    options = {
+                      ip = mkOption { type = str; };
+                      prefixLength = mkOption { type = int; };
+                      gateway = mkOption { type = str; };
+                    };
+                  });
+                  default = null;
+                };
+
                 gateway = mkOption {
                   type = nullOr str;
                   default = null;
                 };
               };
 
+              uplinkInterface = mkEnableOption "uplink interface";
               vlanId = mkOption { type = int; };
             };
           }

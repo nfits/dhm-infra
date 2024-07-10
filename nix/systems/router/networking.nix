@@ -21,14 +21,59 @@ let
         LinkLocalAddressing = "no";
       };
 
-      address = [ "${cfg.ipv4.routerAddress}/${toString cfg.ipv4.prefixLength}" ];
-      gateway = optional (cfg.ipv4.gateway != null) "${cfg.ipv4.gateway}";
+      routingPolicyRules = optionals (cfg.ipv4.exitIPAddress != null) [
+        {
+          routingPolicyRuleConfig = {
+            To = "10.248.0.0/14";
+            Priority = 1000;
+            Table = "main";
+          };
+        }
+        {
+          routingPolicyRuleConfig = {
+            IncomingInterface = name;
+            Priority = 1001;
+            Table = name;
+          };
+        }
+      ];
 
-      routes = map (subnet: {
-        routeConfig = {
-          Destination = subnet;
-        };
-      }) cfg.ipv4.routedSubnets;
+      address = flatten [
+        "${cfg.ipv4.routerAddress}/${toString cfg.ipv4.prefixLength}"
+        (optionals cfg.uplinkInterface (
+          mapAttrsToList (
+            _: cfg: "${cfg.ipv4.exitIPAddress.ip}/${toString cfg.ipv4.exitIPAddress.prefixLength}"
+          ) (filterAttrs (_: v: v.ipv4.exitIPAddress != null) config.dhm.networking.vlans)
+        ))
+      ];
+
+      gateway = optional (cfg.ipv4.gateway != null && !cfg.uplinkInterface) "${cfg.ipv4.gateway}";
+
+      routes = flatten [
+        (map (subnet: {
+          routeConfig = {
+            Destination = subnet;
+          };
+        }) cfg.ipv4.routedSubnets)
+        (optionals cfg.uplinkInterface [
+          {
+            routeConfig = {
+              Table = "main";
+              Gateway = "${cfg.ipv4.gateway}";
+              Destination = "0.0.0.0/0";
+              PreferredSource = cfg.ipv4.routerAddress;
+            };
+          }
+          (mapAttrsToList (name: cfg: {
+            routeConfig = {
+              Table = name;
+              Gateway = cfg.ipv4.exitIPAddress.gateway;
+              PreferredSource = cfg.ipv4.exitIPAddress.ip;
+              Destination = "0.0.0.0/0";
+            };
+          }) (filterAttrs (_: v: v.ipv4.exitIPAddress != null) config.dhm.networking.vlans))
+        ])
+      ];
 
       linkConfig.RequiredForOnline = "routable";
     };
@@ -54,6 +99,21 @@ in
             iifname { uplink } tcp flags syn tcp option maxseg size set rt mtu
           }
         }
+
+        table ip nat {
+          chain postrouting {
+            type nat hook postrouting priority srcnat - 1; policy accept;
+
+            ${
+              concatStringsSep "\n" (
+                mapAttrsToList (
+                  _: cfg:
+                  "ip saddr ${cfg.ipv4.prefix}/${toString cfg.ipv4.prefixLength} oifname uplink snat to ${cfg.ipv4.exitIPAddress.ip}"
+                ) (filterAttrs (_: v: v.ipv4.exitIPAddress != null) config.dhm.networking.vlans)
+              )
+            }
+          }
+        }
       '';
     };
 
@@ -61,6 +121,7 @@ in
       enable = true;
 
       internalIPs = [ "10.248.0.0/14" ];
+      externalIP = config.dhm.networking.vlans.uplink.ipv4.routerAddress;
       externalInterface = "uplink";
 
       forwardPorts = [
@@ -86,6 +147,10 @@ in
   };
 
   systemd.network = {
+    config.routeTables = mapAttrs (_: v: v.vlanId) (
+      filterAttrs (_: v: v.ipv4.exitIPAddress != null) config.dhm.networking.vlans
+    );
+
     netdevs = mapAttrs' (n: v: {
       name = "20-${n}";
       value = v.netdev;

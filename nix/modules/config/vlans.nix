@@ -134,7 +134,14 @@ in
             };
           };
 
-          ipv4 = ipv4Default 5;
+          ipv4 = ipv4Default 5 // {
+            # exitIPAddress = {
+            #   ip = "31.172.98.101";
+            #   prefixLength = 23;
+            #
+            #   gateway = "31.172.99.254";
+            # };
+          };
           vlanId = vlanOffset + 5;
         };
 
@@ -147,6 +154,7 @@ in
             gateway = "31.172.99.254";
           };
 
+          uplinkInterface = true;
           vlanId = 200;
         };
 
@@ -202,7 +210,14 @@ in
 
           dhcp = dhcpDefault 101;
 
-          ipv4 = ipv4Default 101;
+          ipv4 = ipv4Default 101 // {
+            exitIPAddress = {
+              ip = "31.172.98.100";
+              prefixLength = 23;
+
+              gateway = "31.172.99.254";
+            };
+          };
           vlanId = vlanOffset + 1001;
         };
 
