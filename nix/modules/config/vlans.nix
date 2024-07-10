@@ -205,6 +205,15 @@ in
           ipv4 = ipv4Default 101;
           vlanId = vlanOffset + 1001;
         };
+
+        bwi-chal = {
+          dns.subdomain = "bwi-challenge";
+
+          dhcp = dhcpDefault 102;
+
+          ipv4 = ipv4Default 102;
+          vlanId = vlanOffset + 1002;
+        };
       }
       // (listToAttrs (
         map (id: {

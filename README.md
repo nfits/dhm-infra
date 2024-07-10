@@ -32,6 +32,7 @@ DNS Zones are extended by `dhm-ctf.de`.
 | Team 1-14         | 2011-24                | 10.248.<team-id>.0/24            | team-(1-14).       |
 | NVISO Challenge   | 3000                   | 10.248.100.0/24                  | nviso-challenge.   |
 | NVISO Participant | 3001                   | 10.248.101.0/24                  | nviso-participant. |
+| BWI Challenge     | 3002                   | 10.248.102.0/24                  | bwi-challenge.     |
 | Guests            | 4000                   | 10.249.0.0/16                    | guest.             |
 | Cluster Pod       | - (Routed via Cluster) | 10.250.0.0/16 (Pod IP Range)     |                    |
 | Cluster Svc       | - (Routed via Cluster) | 10.251.0.0/16 (Service IP Range) |                    |
