@@ -20,6 +20,8 @@ auth:
       - "729418872045961359" # Ruben (RedRocket)
       - "653830824697004063" # Fabian (Betatester (Tobi (NFITS)))
       - "653368699000193095" # Smartsmurf (Betatester (Tobi (NFITS)))
+      - "210871315446366209" # Peace-Maker (RedRocket)
+      - "276434357818753024" # kauzu (RedRocket)
 
 api:
   replicaCount: 3
