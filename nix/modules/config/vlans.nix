@@ -175,6 +175,13 @@ in
             prefixLength = 16;
 
             routerAddress = "10.249.0.1";
+
+            exitIPAddress = {
+              ip = "31.172.98.50";
+              prefixLength = 23;
+
+              gateway = "31.172.99.254";
+            };
           };
 
           vlanId = vlanOffset + 2000;
