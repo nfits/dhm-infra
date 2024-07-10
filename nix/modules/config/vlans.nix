@@ -151,6 +151,17 @@ in
           vlanId = 200;
         };
 
+        basecamp = {
+          ipv4 = {
+            prefix = "172.22.0.0";
+            prefixLength = 16;
+
+            routerAddress = "172.22.0.42";
+          };
+
+          vlanId = 2006;
+        };
+
         services = {
           dns.subdomain = "svc";
 
