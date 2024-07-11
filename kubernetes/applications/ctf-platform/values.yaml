@@ -24,7 +24,7 @@ auth:
       - "276434357818753024" # kauzu (RedRocket)
 
 api:
-  replicaCount: 3
+  replicaCount: 1
   image:
     repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/platform
 
@@ -42,7 +42,7 @@ api:
         sectionName: https
 
 broker:
-  replicaCount: 3
+  replicaCount: 1
   image:
     repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/platform
 
@@ -55,7 +55,7 @@ broker:
       secretName: broker-tls
 
 frontend:
-  replicaCount: 3
+  replicaCount: 1
   image:
     repository: harbor.dhm-ctf.de/ghcr/nfits/ctf-platform/web
     tag: dhm
@@ -74,7 +74,7 @@ frontend:
         sectionName: https
 
 staticFiles:
-  replicaCount: 3
+  replicaCount: 1
   podAntiAffinityPreset: hard
 
   config:
