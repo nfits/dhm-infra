@@ -60,6 +60,7 @@ let
             routeConfig = {
               Table = "main";
               Gateway = "${cfg.ipv4.gateway}";
+              GatewayOnLink = true;
               Destination = "0.0.0.0/0";
               PreferredSource = cfg.ipv4.routerAddress;
             };
@@ -68,6 +69,7 @@ let
             routeConfig = {
               Table = name;
               Gateway = cfg.ipv4.exitIPAddress.gateway;
+              GatewayOnLink = true;
               PreferredSource = cfg.ipv4.exitIPAddress.ip;
               Destination = "0.0.0.0/0";
             };

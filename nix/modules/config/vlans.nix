@@ -140,26 +140,15 @@ in
 
         uplink = {
           ipv4 = {
-            prefix = "31.172.98.0";
-            prefixLength = 23;
+            prefix = "193.56.133.159";
+            prefixLength = 32;
 
-            routerAddress = "31.172.98.42";
-            gateway = "31.172.99.254";
+            routerAddress = "193.56.133.159";
+            gateway = "169.254.0.1";
           };
 
           uplinkInterface = true;
-          vlanId = 200;
-        };
-
-        basecamp = {
-          ipv4 = {
-            prefix = "172.22.0.0";
-            prefixLength = 16;
-
-            routerAddress = "172.22.0.42";
-          };
-
-          vlanId = 2006;
+          vlanId = 4005;
         };
 
         services = {
@@ -186,13 +175,6 @@ in
             prefixLength = 16;
 
             routerAddress = "10.249.0.1";
-
-            exitIPAddress = {
-              ip = "31.172.98.50";
-              prefixLength = 23;
-
-              gateway = "31.172.99.254";
-            };
           };
 
           vlanId = vlanOffset + 2000;
@@ -221,14 +203,7 @@ in
 
           dhcp = dhcpDefault 101;
 
-          ipv4 = ipv4Default 101 // {
-            exitIPAddress = {
-              ip = "31.172.98.100";
-              prefixLength = 23;
-
-              gateway = "31.172.99.254";
-            };
-          };
+          ipv4 = ipv4Default 101;
 
           vlanId = vlanOffset + 1001;
         };
@@ -257,14 +232,7 @@ in
               };
             };
 
-            ipv4 = ipv4Default (10 + id) // {
-              exitIPAddress = {
-                ip = "31.172.99.${toString id}";
-                prefixLength = 23;
-
-                gateway = "31.172.99.254";
-              };
-            };
+            ipv4 = ipv4Default (10 + id);
 
             vlanId = vlanOffset + (10 + id);
           };
