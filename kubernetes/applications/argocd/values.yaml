@@ -2,13 +2,13 @@ redis-ha:
   enabled: true
 
 controller:
-  replicas: 3
+  replicas: 1
 
 server:
-  replicas: 3
+  replicas: 1
 
 repoServer:
-  replicas: 3
+  replicas: 1
   env:
     - name: HELM_PLUGINS
       value: /custom-tools/helm-plugins/
@@ -89,7 +89,7 @@ repoServer:
           name: custom-tools
 
 applicationSet:
-  replicas: 3
+  replicas: 1
 
 configs:
   cm:
