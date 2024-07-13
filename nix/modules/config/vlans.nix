@@ -83,7 +83,7 @@ in
           };
 
           ipv4 = ipv4Default 2 // {
-            routedSubnets = [ "10.248.3.0/24" ];
+            routedSubnets = [ "193.56.133.168/29" ];
           };
           vlanId = vlanOffset + 2;
         };
