@@ -4,8 +4,8 @@ metadata:
   name: services
 spec:
   blocks:
-    - start: "10.248.3.2"
-      stop: "10.248.3.254"
+    - start: "193.56.133.168"
+      stop: "193.56.133.175"
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
