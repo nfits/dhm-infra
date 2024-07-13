@@ -13,7 +13,7 @@ let
 
   clusterNodeCidr = "10.248.2.0/24";
 
-  lbSvcCIDR = "10.248.3.0/24";
+  lbSvcCIDR = "193.56.133.168/29";
   podCIDR = "10.250.0.0/16";
   svcCIDR = "10.251.0.0/16";
   dnsIP = "10.251.0.10";

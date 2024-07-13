@@ -3,4 +3,4 @@ nginxGateway:
 
 service:
   annotations:
-    metallb.universe.tf/loadBalancerIPs: 10.248.3.2
+    metallb.universe.tf/loadBalancerIPs: 193.56.133.170
