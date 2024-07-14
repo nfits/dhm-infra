@@ -80,14 +80,26 @@ in
     resolved.enable = false;
   };
 
-  networking.firewall = {
-    allowedTCPPorts = [
-      53 # DNS
+  networking.firewall.interfaces = {
+    cluster.allowedTCPPorts = [ 53 ];
+    cluster.allowedUDPPorts = [
+      53
+      67
     ];
-
-    allowedUDPPorts = [
-      53 # DNS
-      67 # DHCP
+    management.allowedTCPPorts = [ 53 ];
+    management.allowedUDPPorts = [
+      53
+      67
+    ];
+    services.allowedTCPPorts = [ 53 ];
+    services.allowedUDPPorts = [
+      53
+      67
+    ];
+    organisers.allowedTCPPorts = [ 53 ];
+    organisers.allowedUDPPorts = [
+      53
+      67
     ];
   };
 }
