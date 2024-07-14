@@ -142,7 +142,7 @@ in
       extraForwardRules = ''
         iifname { organisers } accept comment "organisers have full access"
         iifname { uplink } ip daddr { ${vpnIP} } accept comment "vpn gateway"
-        iifname != { guests } ip daddr 10.248.3.0/24 accept comment "everyone but guests may access the k8s cluster"
+        ip daddr 193.56.133.168/29 accept comment "everyone but guests may access the k8s cluster"
         iifname != { guests } oifname { services } accept comment "everyone but guests have access to services"
       '';
     };
